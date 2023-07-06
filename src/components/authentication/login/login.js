@@ -59,7 +59,7 @@ const Login = () => {
 
       <button type="button" onClick={signInWithGoogle}>Sign in with Google <img id="google-icon" class="social-icons" alt='google-icon'></img></button>
       <button type="button" onClick={signInWithFacebook}>Sign in with Facebook <img id="facebook-icon" class="social-icons" alt='facebook-icon'></img></button>
-
+      <span>Dont have an account? <a href='/signup'>Signup using Email</a></span>
       
     </div>
   );

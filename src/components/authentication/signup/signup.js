@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { auth } from '../firebase';
-import './signup.css';
+import '../login/login.css';
 
 const Signup = () => {
   const [email, setEmail] = useState("");
@@ -31,8 +31,9 @@ const Signup = () => {
             value={password} 
             onChange={(e) => setPassword(e.target.value)}
           />
-          <button type="submit">Login</button>
+          <button type="submit">Signup</button>
         </form>
+        <span>Already have an account? <a href='/login'> Login</a></span>
     </div>
   );
 }
