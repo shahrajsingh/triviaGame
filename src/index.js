@@ -3,11 +3,33 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import {
+  createBrowserRouter,
+  RouterProvider,
+} from "react-router-dom";
+import { AuthProvider } from './components/authentication/authContext';
+import Login from './components/authentication/login/login';
+import Signup from './components/authentication/signup/signup';
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <AuthProvider><App></App></AuthProvider>,
+  },
+  {
+    path: "/login",
+    element: <AuthProvider><Login></Login></AuthProvider>
+  },
+  {
+    path: "/signup",
+    element: <AuthProvider><Signup></Signup></AuthProvider>
+  }
+]);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    <RouterProvider router={router} />
   </React.StrictMode>
 );
 

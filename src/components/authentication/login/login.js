@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { auth, googleProvider, facebookProvider } from './firebase';
+import { auth, googleProvider, facebookProvider } from '../firebase';
 import './login.css';
 
 const Login = () => {
@@ -37,7 +37,7 @@ const Login = () => {
   return (
     <div className="login-form">
       <h2>Trivia Log-In</h2>
-      <button onClick={() => setShowEmailLogin(true)}>Sign in with Email</button>
+      <button type="button" onClick={() => setShowEmailLogin(true)}>Sign in with Email<img id="email-icon" class="social-icons" alt='email-icon'></img></button>
 
       {showEmailLogin && 
         <form id='email-form' onSubmit={signInWithEmail}>
@@ -57,8 +57,8 @@ const Login = () => {
         </form>
       }
 
-      <button onClick={signInWithGoogle}>Sign in with Google</button>
-      <button onClick={signInWithFacebook}>Sign in with Facebook</button>
+      <button type="button" onClick={signInWithGoogle}>Sign in with Google <img id="google-icon" class="social-icons" alt='google-icon'></img></button>
+      <button type="button" onClick={signInWithFacebook}>Sign in with Facebook <img id="facebook-icon" class="social-icons" alt='facebook-icon'></img></button>
 
       
     </div>
