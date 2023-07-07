@@ -1,8 +1,14 @@
 import React, { useState } from 'react';
 import { auth, googleProvider, facebookProvider } from '../firebase';
+import { useAuth } from '../authContext';
+import { signInWithEmailAndPassword } from "firebase/auth";
 import './login.css';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
+  const navigate = useNavigate();
+const {setIsAuthenticated} = useAuth();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showEmailLogin, setShowEmailLogin] = useState(false);
@@ -10,9 +16,17 @@ const Login = () => {
   const signInWithEmail = async (event) => {
     event.preventDefault();
     try {
-      await auth.signInWithEmailAndPassword(email, password);
+      signInWithEmailAndPassword(auth,email, password).then((userCreds)=>{
+        if(userCreds.user){
+          window.localStorage.setItem("user",userCreds);
+          setIsAuthenticated(true);
+          navigate("/");
+        }
+      }).catch((error)=>{
+        alert("Error: " + error.code);
+      });
     } catch (error) {
-      console.error(error);
+      alert("error while signing in");
     }
   };
 
