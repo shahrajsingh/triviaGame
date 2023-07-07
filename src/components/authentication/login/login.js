@@ -24,6 +24,7 @@ const {setIsAuthenticated} = useAuth();
     try {
       signInWithEmailAndPassword(auth,email, password).then((userCreds)=>{
         if(userCreds.user){
+          console.log(userCreds);
           setUser(userCreds);
         }
       }).catch((error)=>{
