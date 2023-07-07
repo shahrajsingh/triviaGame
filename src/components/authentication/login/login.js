@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { auth, googleProvider, facebookProvider } from '../firebase';
 import { useAuth } from '../authContext';
-import { GoogleAuthProvider, signInWithEmailAndPassword,signInWithPopup } from "firebase/auth";
+import { FacebookAuthProvider, GoogleAuthProvider, signInWithEmailAndPassword,signInWithPopup } from "firebase/auth";
 import './login.css';
 import { useNavigate } from 'react-router-dom';
 
@@ -37,12 +37,13 @@ const {setIsAuthenticated} = useAuth();
   const signInWithGoogle = async () => {
     setShowEmailLogin(false);
     try {
-      
-      signInWithPopup(auth,googleProvider).then((result)=>{
+      signInWithPopup(auth, googleProvider).then((result)=>{
         const credential = GoogleAuthProvider.credentialFromResult(result);
+        const token = credential.accessToken;
         let user = result.user;
         if(user){
-          user = Object.assign(user,credential);
+          user = Object.assign(user,{credential,token});
+          console.log(user);
           setUser(user);
         }
       }).catch((error)=>{
@@ -56,9 +57,18 @@ const {setIsAuthenticated} = useAuth();
   const signInWithFacebook = async () => {
     setShowEmailLogin(false);
     try {
-      await auth.signInWithPopup(facebookProvider);
+      signInWithPopup(auth,facebookProvider).then((result)=>{
+        let user = result.user;
+        const credential = FacebookAuthProvider.credentialFromResult(result);
+        const accessToken = credential.accessToken;
+        user = Object.assign(user,{credential,accessToken});
+        console.log(user);
+        setUser(user);
+      }).catch((error)=>{
+        alert("Error: "+error.message);
+      })
     } catch (error) {
-      console.error(error);
+      alert("Error while signing in using facebook");
     }
   };
 
