@@ -1,24 +1,39 @@
 import React, { useState } from 'react';
+import { useNavigate } from "react-router-dom";
 import { auth } from '../firebase';
+import { useAuth } from '../authContext';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
 import '../login/login.css';
 
 const Signup = () => {
+  const navigate = useNavigate();
+
+  const {setIsAuthenticated} = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
-  const signInWithEmail = async (event) => {
+  
+  const signUpWithEmail = async (event) => {
     event.preventDefault();
     try {
-      await auth.signInWithEmailAndPassword(email, password);
+      createUserWithEmailAndPassword(auth,email,password).then((userCreds)=>{
+        if(userCreds.user){
+            window.localStorage.setItem("user",userCreds);
+            setIsAuthenticated(true);
+            navigate("/");
+        }
+      }).catch((error) => {
+        const errorCode = error.code;
+        alert("Error " + errorCode)
+      });
     } catch (error) {
-      console.error(error);
+      alert("there was and issue signing up")
     }
   };
 
   return (
     <div className="login-form">
       <h2>Trivia Signup-In</h2>
-      <form id='email-form' onSubmit={signInWithEmail}>
+      <form id='email-form' onSubmit={signUpWithEmail}>
           <input 
             type="text" 
             placeholder="Email" 
