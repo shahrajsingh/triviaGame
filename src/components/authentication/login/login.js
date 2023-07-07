@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { auth, googleProvider, facebookProvider } from '../firebase';
 import { useAuth } from '../authContext';
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { GoogleAuthProvider, signInWithEmailAndPassword,signInWithPopup } from "firebase/auth";
 import './login.css';
 import { useNavigate } from 'react-router-dom';
 
@@ -13,14 +13,18 @@ const {setIsAuthenticated} = useAuth();
   const [password, setPassword] = useState("");
   const [showEmailLogin, setShowEmailLogin] = useState(false);
 
+  const setUser = (user) =>{
+    window.localStorage.setItem("user",user);
+    setIsAuthenticated(true);
+    navigate("/");
+  };
+
   const signInWithEmail = async (event) => {
     event.preventDefault();
     try {
       signInWithEmailAndPassword(auth,email, password).then((userCreds)=>{
         if(userCreds.user){
-          window.localStorage.setItem("user",userCreds);
-          setIsAuthenticated(true);
-          navigate("/");
+          setUser(userCreds);
         }
       }).catch((error)=>{
         alert("Error: " + error.code);
@@ -33,9 +37,19 @@ const {setIsAuthenticated} = useAuth();
   const signInWithGoogle = async () => {
     setShowEmailLogin(false);
     try {
-      await auth.signInWithPopup(googleProvider);
+      
+      signInWithPopup(auth,googleProvider).then((result)=>{
+        const credential = GoogleAuthProvider.credentialFromResult(result);
+        let user = result.user;
+        if(user){
+          user = Object.assign(user,credential);
+          setUser(user);
+        }
+      }).catch((error)=>{
+        alert("Error: " + error.message);
+      });
     } catch (error) {
-      console.error(error);
+      alert("Error while signing in with google");
     }
   };
 
@@ -78,5 +92,6 @@ const {setIsAuthenticated} = useAuth();
     </div>
   );
 }
+
 
 export default Login;
