@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
   const navigate = useNavigate();
-const {setIsAuthenticated} = useAuth();
+  const {setIsAuthenticated} = useAuth();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -16,16 +16,23 @@ const {setIsAuthenticated} = useAuth();
   const setUser = (user) =>{
     window.localStorage.setItem("user",user);
     setIsAuthenticated(true);
-    navigate("/");
+    checkIfNewUser(user?.metadata);
   };
+
+  const checkIfNewUser = (userData) =>{
+    if(userData.lastLoginAt === userData.createdAt){
+      navigate("/create2fa");
+    } else{
+      navigate("/complete2fa");
+    }
+  }
 
   const signInWithEmail = async (event) => {
     event.preventDefault();
     try {
       signInWithEmailAndPassword(auth,email, password).then((userCreds)=>{
         if(userCreds.user){
-          console.log(userCreds);
-          setUser(userCreds);
+          setUser(userCreds.user);
         }
       }).catch((error)=>{
         alert("Error: " + error.code);
@@ -44,7 +51,6 @@ const {setIsAuthenticated} = useAuth();
         let user = result.user;
         if(user){
           user = Object.assign(user,{credential,token});
-          console.log(user);
           setUser(user);
         }
       }).catch((error)=>{
@@ -63,7 +69,6 @@ const {setIsAuthenticated} = useAuth();
         const credential = FacebookAuthProvider.credentialFromResult(result);
         const accessToken = credential.accessToken;
         user = Object.assign(user,{credential,accessToken});
-        console.log(user);
         setUser(user);
       }).catch((error)=>{
         alert("Error: "+error.message);

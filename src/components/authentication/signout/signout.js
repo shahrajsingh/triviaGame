@@ -17,6 +17,7 @@ const Signout = (props) => {
             onClick={()=>{
                 signOut(auth).then(()=>{
                     setIsAuthenticated(false);
+                    window.localStorage.removeItem("user");
                 }).catch((error)=>{
                     alert(error.message);
                 })
