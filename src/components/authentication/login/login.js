@@ -1,21 +1,18 @@
 import React, { useState } from 'react';
 import { auth, googleProvider, facebookProvider } from '../firebase';
-import { useAuth } from '../authContext';
 import { FacebookAuthProvider, GoogleAuthProvider, signInWithEmailAndPassword,signInWithPopup } from "firebase/auth";
 import './login.css';
 import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
   const navigate = useNavigate();
-  const {setIsAuthenticated} = useAuth();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showEmailLogin, setShowEmailLogin] = useState(false);
 
   const setUser = (user) =>{
-    window.localStorage.setItem("user",user);
-    setIsAuthenticated(true);
+    window.localStorage.setItem("user",user.email);
     checkIfNewUser(user?.metadata);
   };
 
@@ -81,7 +78,7 @@ const Login = () => {
   return (
     <div className="login-form">
       <h2>Trivia Log-In</h2>
-      <button type="button" onClick={() => setShowEmailLogin(true)}>Sign in with Email<img id="email-icon" class="social-icons" alt='email-icon'></img></button>
+      <button type="button" onClick={() => setShowEmailLogin(true)}><img id="email-icon" className="social-icons" alt='email-icon'></img>Sign in with Email</button>
 
       {showEmailLogin && 
         <form id='email-form' onSubmit={signInWithEmail}>
@@ -101,8 +98,8 @@ const Login = () => {
         </form>
       }
 
-      <button type="button" onClick={signInWithGoogle}>Sign in with Google <img id="google-icon" class="social-icons" alt='google-icon'></img></button>
-      <button type="button" onClick={signInWithFacebook}>Sign in with Facebook <img id="facebook-icon" class="social-icons" alt='facebook-icon'></img></button>
+      <button type="button" onClick={signInWithGoogle}><img id="google-icon" className="social-icons" alt='google-icon'></img>Sign in with Google </button>
+      <button type="button" onClick={signInWithFacebook}><img id="facebook-icon" className="social-icons" alt='facebook-icon'></img><span style={{marginLeft: "18px"}}></span>Sign in with Facebook </button>
       <span>Dont have an account? <a href='/signup'>Signup using Email</a></span>
       
     </div>

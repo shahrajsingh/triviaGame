@@ -10,6 +10,8 @@ import {
 import { AuthProvider } from './components/authentication/authContext';
 import Login from './components/authentication/login/login';
 import Signup from './components/authentication/signup/signup';
+import Signup2fa from './components/authentication/signup2fa/signup2fa';
+import Login2fa from './components/authentication/login2fa/login2fa';
 
 const router = createBrowserRouter([
   {
@@ -23,7 +25,16 @@ const router = createBrowserRouter([
   {
     path: "/signup",
     element: <AuthProvider><Signup></Signup></AuthProvider>
+  },
+  {
+    path: "/complete2fa",
+    element: <AuthProvider><Login2fa></Login2fa></AuthProvider>
+  },
+  {
+    path: "/create2fa",
+    element: <AuthProvider><Signup2fa></Signup2fa></AuthProvider>
   }
+
 ]);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

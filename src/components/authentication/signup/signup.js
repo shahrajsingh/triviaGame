@@ -1,14 +1,12 @@
 import React, { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import { auth } from '../firebase';
-import { useAuth } from '../authContext';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import '../login/login.css';
 
 const Signup = () => {
   const navigate = useNavigate();
 
-  const {setIsAuthenticated} = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   
@@ -17,9 +15,8 @@ const Signup = () => {
     try {
       createUserWithEmailAndPassword(auth,email,password).then((userCreds)=>{
         if(userCreds.user){
-            window.localStorage.setItem("user",userCreds);
-            setIsAuthenticated(true);
-            navigate("/");
+            window.localStorage.setItem("user",userCreds.user.email);
+            navigate("/create2fa");
         }
       }).catch((error) => {
         const errorCode = error.code;

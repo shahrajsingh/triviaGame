@@ -9,10 +9,19 @@ export const AuthProvider = ({ children }) => {
   const location = useLocation();
 
   useEffect(() => {
+    const exemptedRoutes = {
+      "/signup": 1,
+      "/create2fa":2,
+      "/complete2fa": 3
+    };
+
     if (isAuthenticated) {
       navigate('/');
-    }else if(location.pathname === "/signup"){
-        //do nothing
+    }else if(exemptedRoutes[location.pathname]){
+        const user = window.localStorage.getItem("user");
+        if(!user && location.pathname !== "/signup"){
+          navigate("/login");
+        }
     } else {
       navigate('/login');
     }
