@@ -8,7 +8,7 @@ AWS.config.update({
 
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 
-export const fetchData = async (tableName)=>{
+export const fetchDataFromDynamoDB = async (tableName)=>{
   const fetchDataPromise = new Promise((resolve,reject)=>{
     dynamodb.scan({TableName: tableName}, function(err,data){
       if(err){
@@ -44,12 +44,11 @@ export const storeDataInDynamoDB = async (userId, questionsAndAnswers) => {
     return qa2faPromise;
   }
   
-  // Function to retrieve data from DynamoDB
   export const getDataFromDynamoDB = async (userId) => {
     let getParams = {
       TableName: 'TriviaUsers',
       Key: {
-        'UserID': userId
+        'userID': userId
       }
     };
     
