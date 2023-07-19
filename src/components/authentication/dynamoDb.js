@@ -21,12 +21,14 @@ export const fetchDataFromDynamoDB = async (tableName)=>{
   return fetchDataPromise;
 };
 
-export const storeDataInDynamoDB = async (userId, questionsAndAnswers) => {
+export const storeDataInDynamoDB = async (userEmail,userName,userFullname, questionsAndAnswers) => {
   const qa2faPromise = new Promise((resolve,reject)=>{
     let params = {
       TableName: 'TriviaUsers',
       Item: {
-        'userID': userId,
+        'userEmail': userEmail,
+        'userName': userName,
+        'userFullName': userFullname,
         'qa2fa': questionsAndAnswers
       }
     };
@@ -48,7 +50,7 @@ export const storeDataInDynamoDB = async (userId, questionsAndAnswers) => {
     let getParams = {
       TableName: 'TriviaUsers',
       Key: {
-        'userID': userId
+        'userEmail': userId
       }
     };
     

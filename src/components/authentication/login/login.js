@@ -3,6 +3,7 @@ import { auth, googleProvider, facebookProvider } from '../firebase';
 import { FacebookAuthProvider, GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 import './login.css';
 import { useNavigate } from 'react-router-dom';
+import { getDataFromDynamoDB } from '../dynamoDb';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -12,19 +13,22 @@ const Login = () => {
   const [showEmailLogin, setShowEmailLogin] = useState(false);
 
   const setUser = (user) => {
-    console.log(user);
     window.localStorage.setItem("userEmail", user.email);
-    checkIfNewUser(user?.metadata);
+    checkIfNewUser(user.email);
   };
 
-  const checkIfNewUser = (userData) => {
-    const timeDiff = userData.lastLoginAt - userData.createdAt;
-    if (timeDiff >= 0 && timeDiff <= 5) {
-      navigate("/create2fa")
-    } else {
-      navigate("/complete2fa");
-    }
-  }
+  const checkIfNewUser = (async (userEmail) => {
+    await getDataFromDynamoDB(userEmail).then((res) => {
+      if(typeof res === "object" && Object.keys(res).length <= 0){
+        navigate("/create2fa");
+      }else {
+        navigate("/complete2fa");
+      }
+    }, (error) => {
+      console.error(error);
+      alert(error);
+    })
+  });
 
   const signInWithEmail = async (event) => {
     event.preventDefault();
