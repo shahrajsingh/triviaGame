@@ -12,6 +12,9 @@ import Login from './components/authentication/login/login';
 import Signup from './components/authentication/signup/signup';
 import Signup2fa from './components/authentication/signup2fa/signup2fa';
 import Login2fa from './components/authentication/login2fa/login2fa';
+import CreateTeam from './pages/createTeam/CreateTeam';
+import  TeamStats  from './pages/teamStats/TeamStats';
+import ManageTeam from './pages/manageteam/ManageTeam';
 
 const router = createBrowserRouter([
   {
@@ -33,8 +36,19 @@ const router = createBrowserRouter([
   {
     path: "/create2fa",
     element: <AuthProvider><Signup2fa></Signup2fa></AuthProvider>
+  },
+  {
+    path: "/create_team",
+    element: <CreateTeam></CreateTeam>
+  },
+  {
+    path: "/teamstats/id",
+    element: <TeamStats></TeamStats>
+  },
+  {
+    path: "/manageteam/id",
+    element: <ManageTeam></ManageTeam>
   }
-
 ]);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
