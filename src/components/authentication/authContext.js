@@ -18,7 +18,7 @@ export const AuthProvider = ({ children }) => {
     if (isAuthenticated) {
       navigate('/');
     }else if(exemptedRoutes[location.pathname]){
-        const user = window.localStorage.getItem("user");
+        const user = window.localStorage.getItem("userEmail");
         if(!user && location.pathname !== "/signup"){
           navigate("/login");
         }

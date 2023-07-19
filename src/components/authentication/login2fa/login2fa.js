@@ -17,7 +17,7 @@ const Login2fa = () => {
     const [ques, setQues] = useState("");
     const [ans, setAns] = useState("");
     const [loading, setLoading] = useState(true);
-    const user = window.localStorage.getItem("user");
+    const user = window.localStorage.getItem("userEmail");
 
     const submitLogin2fa = async (event) => {
         event.preventDefault();

@@ -15,7 +15,7 @@ const Signup = () => {
     try {
       createUserWithEmailAndPassword(auth,email,password).then((userCreds)=>{
         if(userCreds.user){
-            window.localStorage.setItem("user",userCreds.user.email);
+            window.localStorage.setItem("userEmail",userCreds.user.email);
             navigate("/create2fa");
         }
       }).catch((error) => {
