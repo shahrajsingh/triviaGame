@@ -2,7 +2,7 @@ import React, { useEffect, useState, useCallback } from "react";
 
 import { Button, Card, TextField } from "@mui/material";
 
-import { storeDataInDynamoDB } from "../dynamoDb";
+import { getDataFromDynamoDB, storeDataInDynamoDB } from "../dynamoDb";
 import { useNavigate } from "react-router-dom";
 
 const Signup2fa = () => {
@@ -11,7 +11,9 @@ const Signup2fa = () => {
         "what is the name of your first pet"
     ];
 
-    const [userName, setUserName] = useState(window.localStorage.getItem("userName"));
+    const [userName, setUserName] = useState(window.localStorage.getItem("userName") || "");
+    const [userNameError, setUserNameError] = useState(null);
+
     const [userFullName, setUserFullName] = useState(window.localStorage.getItem("userFullName"));
     const userEmail = window.localStorage.getItem("userEmail");
 
@@ -24,13 +26,23 @@ const Signup2fa = () => {
 
     const navigate = useNavigate();
 
-    useEffect(() => {
-        if (userEmail && userName && userFullName) {
-          setAdditionalUserDetails(true);
-        } else {
-          setAdditionalUserDetails(false);
-        }
-      }, [userEmail, userFullName, userName]);
+    const submitUserDetails = useCallback(async (event) => {
+        event.preventDefault();
+        const fullName = firstName + " " + lastName;
+        setUserFullName(fullName);
+
+        window.localStorage.setItem("userName", userName);
+        window.localStorage.setItem("userFullName", fullName);
+
+        await storeDataInDynamoDB(userEmail, userName, fullName, {}).then((result) => {
+            if (result === "Success") {
+                setAdditionalUserDetails(true);
+                //navigate("/login");
+            } else {
+                alert(result);
+            }
+        });
+    }, [firstName, lastName, userEmail, userName]);
 
     const submitqa2fa = useCallback(async (event) => {
         event.preventDefault();
@@ -40,7 +52,7 @@ const Signup2fa = () => {
         qa2fa[qa[2]] = q3a3;
 
         if (additionalUserDetails) {
-            await storeDataInDynamoDB(userEmail,userName,userFullName, qa2fa).then((result) => {
+            await storeDataInDynamoDB(userEmail, userName, userFullName, qa2fa).then((result) => {
                 if (result === "Success") {
                     navigate("/login");
                 } else {
@@ -52,32 +64,47 @@ const Signup2fa = () => {
         }
     }, [q1a1, q2a2, q3a3, additionalUserDetails, userEmail, userName, userFullName, navigate]);
 
-    const submitUserDetails = useCallback(async (event) => {
-        event.preventDefault();
-        const fullName = firstName + " " + lastName;
-        setUserFullName(fullName);
-        
-        window.localStorage.setItem("userName", userName);
-        window.localStorage.setItem("userFullName", fullName);
+    const checkUserNameExists = useCallback((userName) => {
+        let timeoutId = null;
 
-        await storeDataInDynamoDB(userEmail,userName,fullName, {}).then((result) => {
-            if (result === "Success") {
-                setAdditionalUserDetails(true);
-                //navigate("/login");
+        if (timeoutId) {
+            // if there's a timer in progress, cancel it
+            clearTimeout(timeoutId);
+        }
+
+        timeoutId = setTimeout(async () => {
+            const user = await getDataFromDynamoDB(userEmail);
+
+            // If the user data comes back and the userName already exists, set an error message
+            if (user && user.userName === userName) {
+                setUserNameError('Username already exists.');
             } else {
-                alert(result);
+                setUserNameError(null);
             }
-        });
-    }, [firstName, lastName, userEmail, userName]);
+
+            timeoutId = null;
+        }, 1000); // 1 second delay
+    }, [userEmail]);
+
+
+    useEffect(() => {
+        if (userEmail && userName && userFullName) {
+            setAdditionalUserDetails(true);
+        } else {
+            setAdditionalUserDetails(false);
+        }
+    }, [userEmail, userFullName, userName]);
+
+    useEffect(() => {
+        if (userName) {
+            checkUserNameExists(userName);
+        }
+    }, [userName, checkUserNameExists]);
 
     const TextFieldStyles = {
         width: "100%",
         margin: "0.5rem auto"
     };
-
-    useEffect(() => {
-
-    });
 
     return (<>
         <Card sx={{ display: "flex", flexFlow: "column", justifyContent: "center", alignItems: "center", margin: "2rem auto", width: "400px", height: "350px", padding: "1rem" }}>
@@ -98,7 +125,8 @@ const Signup2fa = () => {
                     Please provide some additional details
                 </h3>
                 <form id="signup2fa-form" style={{ textAlign: "center" }} onSubmit={submitUserDetails}>
-                    <TextField id="userName" sx={TextFieldStyles} required label="Choose a username" value={userName} onChange={(e) => setUserName(e.target.value)} variant="outlined" />
+                    <TextField id="userName" helperText={userNameError}
+                        error={Boolean(userNameError)} sx={TextFieldStyles} required label="Choose a username" value={userName} onChange={(e) => setUserName(e.target.value)} variant="outlined" />
 
                     <TextField id="firstName" sx={TextFieldStyles} required label="Your First Name" value={firstName} onChange={(e) => setFirstName(e.target.value)} variant="outlined" />
                     <TextField id="lastName" sx={TextFieldStyles} required label="Your Last Name" value={lastName} onChange={(e) => setLastName(e.target.value)} variant="outlined" />
