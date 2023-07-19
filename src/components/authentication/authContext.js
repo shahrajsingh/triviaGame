@@ -14,11 +14,11 @@ export const AuthProvider = ({ children }) => {
       "/create2fa":2,
       "/complete2fa": 3
     };
-
-    if (isAuthenticated) {
+    const user = window.localStorage.getItem("userEmail"); 
+    if (isAuthenticated || user) {
+      setIsAuthenticated(true);
       navigate('/');
     }else if(exemptedRoutes[location.pathname]){
-        const user = window.localStorage.getItem("userEmail");
         if(!user && location.pathname !== "/signup"){
           navigate("/login");
         }
