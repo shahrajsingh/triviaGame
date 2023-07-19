@@ -58,11 +58,11 @@ const router = createBrowserRouter([
   },
   {
     path: "/create_team",
-    element: <AuthProvider><CreateTeam></CreateTeam></AuthProvider>
+    element: <CreateTeam></CreateTeam>
   },
   {
     path: "/teamstats/id",
-    element: <AuthProvider><TeamStats></TeamStats></AuthProvider>
+    element: <TeamStats></TeamStats>
   },
   {
     path: "/manageteam/id",
