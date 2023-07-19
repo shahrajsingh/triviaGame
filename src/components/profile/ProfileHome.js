@@ -1,6 +1,8 @@
-import { Grid } from "@mui/material";
 import React from "react";
+import Stats from "./Stats";
 import Profile from "./Profile";
+import { Grid } from "@material-ui/core";
+import TeamAffiliation from "./TeamAffiliation";
 
 const ProfileHome = () => {
   return (
@@ -8,7 +10,9 @@ const ProfileHome = () => {
       <Grid item>
         <Profile />
       </Grid>
-      <Grid item style={{ marginLeft: "15rem", marginRight: "15rem" }}></Grid>
+      <Grid item style={{ marginLeft: "15rem", marginRight: "15rem" }}>
+        <Stats />
+      </Grid>
       <Grid item>
         <Grid container justify="center">
           <Grid
@@ -18,7 +22,9 @@ const ProfileHome = () => {
               marginRight: "15rem",
               marginTop: "3%",
             }}
-          ></Grid>
+          >
+            <TeamAffiliation />
+          </Grid>
         </Grid>
       </Grid>
       <Grid item>

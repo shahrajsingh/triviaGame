@@ -56,7 +56,7 @@ const Profile = () => {
   const [isNameEditMode, setNameEditMode] = useState(false);
   const [isContactEditMode, setContactEditMode] = useState(false);
   const [isPhotoEditMode, setPhotoEditMode] = useState(false);
-  const id = "frontend@gmail.com";
+  const id = window.localStorage.getItem("userEmail");
   useEffect(() => {
     axios
       .post(
@@ -64,7 +64,7 @@ const Profile = () => {
         { id }
       )
       .then((response) => {
-        setName(response.data.name);
+        setName(window.localStorage.getItem("userFullName"));
         setContact(response.data.contact);
         setPhoto(response.data.image);
         setEmail(response.data.id);
