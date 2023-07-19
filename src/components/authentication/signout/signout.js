@@ -11,18 +11,22 @@ const Signout = (props) => {
 
     const { setIsAuthenticated } = useAuth();
 
+    const logout = (() => {
+        signOut(auth).then(() => {
+            setIsAuthenticated(false);
+            window.localStorage.removeItem("userEmail");
+            window.localStorage.removeItem("userName");
+            window.localStorage.removeItem("userFullName");
+        }).catch((error) => {
+            alert(error.message);
+        })
+    });
+
     return (
         <Button sx={props?.styles ? props.styles : defaultStyle}
             variant="contained"
-            onClick={()=>{
-                signOut(auth).then(()=>{
-                    setIsAuthenticated(false);
-                    window.localStorage.removeItem("userEmail");
-                    window.localStorage.removeItem("userName");
-                    window.localStorage.removeItem("userFullName");
-                }).catch((error)=>{
-                    alert(error.message);
-                })
+            onClick={() => {
+                logout();
             }}>
             Log-out
         </Button>

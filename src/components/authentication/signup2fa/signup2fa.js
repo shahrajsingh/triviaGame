@@ -39,8 +39,8 @@ const Signup2fa = () => {
         qa2fa[qa[1]] = q2a2;
         qa2fa[qa[2]] = q3a3;
 
-        if (userEmail) {
-            await storeDataInDynamoDB(userEmail, qa2fa).then((result) => {
+        if (additionalUserDetails) {
+            await storeDataInDynamoDB(userEmail,userName,userFullName, qa2fa).then((result) => {
                 if (result === "Success") {
                     navigate("/login");
                 } else {
@@ -50,17 +50,25 @@ const Signup2fa = () => {
         } else {
             alert("There has been an error while authenticating");
         }
-    }, [q1a1, q2a2, q3a3, userEmail, navigate]);
+    }, [q1a1, q2a2, q3a3, additionalUserDetails, userEmail, userName, userFullName, navigate]);
 
-    const submitUserDetails = useCallback((event) => {
+    const submitUserDetails = useCallback(async (event) => {
         event.preventDefault();
         const fullName = firstName + " " + lastName;
         setUserFullName(fullName);
-    
+        
         window.localStorage.setItem("userName", userName);
         window.localStorage.setItem("userFullName", fullName);
-        setAdditionalUserDetails(true);
-    }, [firstName, lastName, userName]);
+
+        await storeDataInDynamoDB(userEmail,userName,fullName, {}).then((result) => {
+            if (result === "Success") {
+                setAdditionalUserDetails(true);
+                //navigate("/login");
+            } else {
+                alert(result);
+            }
+        });
+    }, [firstName, lastName, userEmail, userName]);
 
     const TextFieldStyles = {
         width: "100%",

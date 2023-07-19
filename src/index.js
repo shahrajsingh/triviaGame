@@ -9,7 +9,6 @@ import Login from "./components/authentication/login/login";
 import Signup from "./components/authentication/signup/signup";
 import Signup2fa from "./components/authentication/signup2fa/signup2fa";
 import Login2fa from "./components/authentication/login2fa/login2fa";
-import ProfileHome from "./components/profile/ProfileHome";
 
 const router = createBrowserRouter([
   {
@@ -51,10 +50,6 @@ const router = createBrowserRouter([
         <Signup2fa></Signup2fa>
       </AuthProvider>
     ),
-  },
-  {
-    path: "/profile",
-    element: <ProfileHome />,
   },
 ]);
 
