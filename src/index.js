@@ -1,43 +1,64 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
-import {
-  createBrowserRouter,
-  RouterProvider,
-} from "react-router-dom";
-import { AuthProvider } from './components/authentication/authContext';
-import Login from './components/authentication/login/login';
-import Signup from './components/authentication/signup/signup';
-import Signup2fa from './components/authentication/signup2fa/signup2fa';
-import Login2fa from './components/authentication/login2fa/login2fa';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./index.css";
+import App from "./App";
+import reportWebVitals from "./reportWebVitals";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { AuthProvider } from "./components/authentication/authContext";
+import Login from "./components/authentication/login/login";
+import Signup from "./components/authentication/signup/signup";
+import Signup2fa from "./components/authentication/signup2fa/signup2fa";
+import Login2fa from "./components/authentication/login2fa/login2fa";
+import ProfileHome from "./components/profile/ProfileHome";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <AuthProvider><App></App></AuthProvider>,
+    element: (
+      <AuthProvider>
+        <App></App>
+      </AuthProvider>
+    ),
   },
   {
     path: "/login",
-    element: <AuthProvider><Login></Login></AuthProvider>
+    element: (
+      <AuthProvider>
+        <Login></Login>
+      </AuthProvider>
+    ),
   },
   {
     path: "/signup",
-    element: <AuthProvider><Signup></Signup></AuthProvider>
+    element: (
+      <AuthProvider>
+        <Signup></Signup>
+      </AuthProvider>
+    ),
   },
   {
     path: "/complete2fa",
-    element: <AuthProvider><Login2fa></Login2fa></AuthProvider>
+    element: (
+      <AuthProvider>
+        <Login2fa></Login2fa>
+      </AuthProvider>
+    ),
   },
   {
     path: "/create2fa",
-    element: <AuthProvider><Signup2fa></Signup2fa></AuthProvider>
-  }
-
+    element: (
+      <AuthProvider>
+        <Signup2fa></Signup2fa>
+      </AuthProvider>
+    ),
+  },
+  {
+    path: "/profile",
+    element: <ProfileHome />,
+  },
 ]);
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <RouterProvider router={router} />
