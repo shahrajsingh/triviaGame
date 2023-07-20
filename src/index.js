@@ -14,6 +14,9 @@ import TeamStats from "./pages/teamStats/TeamStats";
 import ManageTeam from "./pages/manageteam/ManageTeam";
 import ProfileHome from "./components/profile/ProfileHome";
 import Quiz from "./components/in-game/Quiz";
+import QuizHome from "./components/Admin/QuizHome";
+import CreateQuiz from "./components/Admin/CreateQuiz";
+import EditQuiz from "./components/Admin/EditQuiz";
 
 const router = createBrowserRouter([
   {
@@ -58,11 +61,11 @@ const router = createBrowserRouter([
   },
   {
     path: "/create_team",
-    element: <CreateTeam></CreateTeam>
+    element: <CreateTeam></CreateTeam>,
   },
   {
     path: "/teamstats/id",
-    element: <TeamStats></TeamStats>
+    element: <TeamStats></TeamStats>,
   },
   {
     path: "/manageteam/id",
@@ -75,6 +78,18 @@ const router = createBrowserRouter([
   {
     path: "/startquiz",
     element: <Quiz />,
+  },
+  {
+    path: "/admin/home",
+    element: <QuizHome />,
+  },
+  {
+    path: "/admin/createquiz",
+    element: <CreateQuiz />,
+  },
+  {
+    path: "/admin/editquiz/:encodedQuizData",
+    element: <EditQuiz />,
   },
 ]);
 
