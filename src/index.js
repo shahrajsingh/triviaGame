@@ -17,6 +17,7 @@ import Quiz from "./components/in-game/Quiz";
 import QuizHome from "./components/Admin/QuizHome";
 import CreateQuiz from "./components/Admin/CreateQuiz";
 import EditQuiz from "./components/Admin/EditQuiz";
+import Lobby from "./components/lobby/Lobby";
 
 const router = createBrowserRouter([
   {
@@ -90,6 +91,10 @@ const router = createBrowserRouter([
   {
     path: "/admin/editquiz/:encodedQuizData",
     element: <EditQuiz />,
+  },
+  {
+    path: "/lobby",
+    element: <Lobby />,
   },
 ]);
 

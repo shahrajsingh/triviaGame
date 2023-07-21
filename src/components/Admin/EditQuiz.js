@@ -13,11 +13,7 @@ import {
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
-import {
-  CheckCircleOutlineOutlined,
-  CheckCircleOutlined,
-  Edit,
-} from "@mui/icons-material";
+import { CheckCircleOutlined, Edit } from "@mui/icons-material";
 
 const EditQuiz = () => {
   const navigate = useNavigate();
@@ -229,6 +225,7 @@ const EditQuiz = () => {
     const optionLetters = ["A", "B", "C", "D"];
     return optionLetters[optionIndex] || "";
   };
+
   const handleEditQuestionInputChange = (event, index, optionIndex) => {
     const { name, value } = event.target;
 
