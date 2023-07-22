@@ -13,7 +13,7 @@ import {
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { CheckCircleOutlined, Edit } from "@mui/icons-material";
+import { CheckCircleOutlined, Delete, Edit } from "@mui/icons-material";
 
 const EditQuiz = () => {
   const navigate = useNavigate();
@@ -23,9 +23,11 @@ const EditQuiz = () => {
   const [quizData, setQuizData] = useState({
     quizNumber: "",
     quizCategory: "",
-    quizLevel: "easy",
+    quizLevel: "",
     quizExpiry: "",
     timeLimit: "",
+    quizName: "",
+    quizDescription: "",
   });
 
   useEffect(() => {
@@ -41,10 +43,26 @@ const EditQuiz = () => {
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-    setQuizData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+
+    if (name === "quizExpiry") {
+      // Format the date string as required (remove "T" and seconds)
+      const formattedDate = value.replace("T", " ").substring(0, 16);
+      setQuizData((prevData) => ({
+        ...prevData,
+        [name]: formattedDate,
+      }));
+    } else if (name === "timeLimit") {
+      const timeLimitValue = Math.max(parseInt(value, 10), 0);
+      setQuizData((prevData) => ({
+        ...prevData,
+        [name]: timeLimitValue,
+      }));
+    } else {
+      setQuizData((prevData) => ({
+        ...prevData,
+        [name]: value,
+      }));
+    }
   };
 
   const handleSubmit = async () => {
@@ -71,8 +89,8 @@ const EditQuiz = () => {
   };
 
   const [newQuestion, setNewQuestion] = useState({
-    quizNumber: "",
-    questionCategory: "",
+    quizNumber: quizData.quizNumber,
+    questionCategory: quizData.quizCategory,
     questionLevel: "",
     correctAnswer: "",
     options: ["", "", "", ""],
@@ -138,7 +156,7 @@ const EditQuiz = () => {
         "https://d8nbpcntna.execute-api.us-east-1.amazonaws.com/serverless/addnewquestion",
         {
           quizNumber: quizData.quizNumber,
-          questionCategory: newQuestion.questionCategory,
+          questionCategory: quizData.quizCategory,
           questionLevel: newQuestion.questionLevel,
           correctAnswer: newQuestion.correctAnswer,
           options: newQuestion.options,
@@ -147,6 +165,7 @@ const EditQuiz = () => {
       );
 
       if (response.status === 200) {
+        console.log(response);
         fetchQuestions();
       } else {
         console.error("Failed to add the question:", response);
@@ -240,6 +259,35 @@ const EditQuiz = () => {
       return updatedQuestions;
     });
   };
+
+  const handleDeleteQuestion = async (index) => {
+    const questionToDelete = allQuestions[index];
+
+    const dataToDelete = {
+      uuid: questionToDelete.uuidKey,
+      questionCategory: questionToDelete.questionCategory,
+      quizNumber: quizData.quizNumber,
+    };
+    try {
+      const response = await axios.delete(
+        "https://d8nbpcntna.execute-api.us-east-1.amazonaws.com/serverless/getquizquestions",
+        {
+          data: dataToDelete,
+        }
+      );
+
+      if (response.status === 200) {
+        setAllQuestions((prevQuestions) =>
+          prevQuestions.filter((_, i) => i !== index)
+        );
+      } else {
+        console.error("Failed to delete question:", response);
+      }
+    } catch (error) {
+      console.error("Error deleting question:", error);
+    }
+  };
+
   return (
     <Container
       maxWidth="lg"
@@ -265,11 +313,33 @@ const EditQuiz = () => {
             <Grid item xs={12}>
               <TextField
                 fullWidth
+                label="Quiz Name"
+                name="quizName"
+                value={quizData.quizName}
+                onChange={handleChange}
+                variant="outlined"
+              />
+            </Grid>
+
+            <Grid item xs={12}>
+              <TextField
+                fullWidth
+                label="Quiz Description"
+                name="quizDescription"
+                value={quizData.quizDescription}
+                onChange={handleChange}
+                variant="outlined"
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                fullWidth
                 label="Quiz Category"
                 name="quizCategory"
                 value={quizData.quizCategory}
                 onChange={handleChange}
                 variant="outlined"
+                disabled
               />
             </Grid>
             <Grid item xs={12}>
@@ -342,12 +412,11 @@ const EditQuiz = () => {
 
           <TextField
             fullWidth
-            label="Question Category"
+            label={quizData.quizCategory}
             name="questionCategory"
-            value={newQuestion.questionCategory}
-            onChange={handleNewQuestionChange}
             variant="outlined"
             sx={{ mb: 2 }}
+            disabled
           />
           <FormControl fullWidth variant="outlined" sx={{ mb: 2 }}>
             <InputLabel>Question Level</InputLabel>
@@ -572,6 +641,20 @@ const EditQuiz = () => {
                         alignItems: "center",
                       }}
                     >
+                      <Button
+                        variant="contained"
+                        color="secondary"
+                        onClick={() => handleDeleteQuestion(index)}
+                        startIcon={<Delete />}
+                        sx={{
+                          textTransform: "none",
+                          fontWeight: "bold",
+                          mt: 1,
+                          marginRight: "0.5rem",
+                        }}
+                      >
+                        Delete Question
+                      </Button>
                       <Button
                         variant="contained"
                         color="primary"

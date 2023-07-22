@@ -16,6 +16,8 @@ const CreateQuizPage = () => {
   const navigate = useNavigate();
   const [quizData, setQuizData] = useState({
     quizNumber: "",
+    quizName: "",
+    quizDescription: "",
     quizCategory: "",
     quizLevel: "easy",
     quizExpiry: "",
@@ -67,6 +69,7 @@ const CreateQuizPage = () => {
       console.error("Error submitting quiz data:", error);
     }
   };
+
   const handleTimeLimitKeyPress = (event) => {
     const allowedKeys = new Set([
       "ArrowUp",
@@ -80,6 +83,7 @@ const CreateQuizPage = () => {
       event.preventDefault();
     }
   };
+
   return (
     <Container
       maxWidth="sm"
@@ -95,6 +99,26 @@ const CreateQuizPage = () => {
             label="Quiz Number"
             name="quizNumber"
             value={quizData.quizNumber}
+            onChange={handleChange}
+            variant="outlined"
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <TextField
+            fullWidth
+            label="Quiz Name"
+            name="quizName"
+            value={quizData.quizName}
+            onChange={handleChange}
+            variant="outlined"
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <TextField
+            fullWidth
+            label="Quiz Description"
+            name="quizDescription"
+            value={quizData.quizDescription}
             onChange={handleChange}
             variant="outlined"
           />

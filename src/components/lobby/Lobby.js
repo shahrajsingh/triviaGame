@@ -81,18 +81,13 @@ const Lobby = () => {
   const convertToValidDate = (dateString) => {
     if (!dateString) return null;
 
-    if (dateString.includes("T")) {
-      const [datePart, timePart] = dateString.split("T");
+    if (dateString.includes("-")) {
+      const [datePart, timePart] = dateString.split(" ");
       const [year, month, day] = datePart.split("-");
       const [hour, minute] = timePart.split(":");
       return new Date(year, month - 1, day, hour, minute);
-    } else if (dateString.includes("/")) {
-      const [datePart, timePart] = dateString.split(" ");
-      const [day, month, year] = datePart.split("/");
-      const [hour, minute] = timePart.split(":");
-      return new Date(year, month - 1, day, hour, minute);
     } else {
-      return null; // Invalid date format
+      return null;
     }
   };
 
@@ -279,7 +274,7 @@ const Lobby = () => {
                         color: purple[600],
                       }}
                     >
-                      {`Quiz ${quiz.quizName}`}
+                      {`${quiz.quizName}`}
                     </TableCell>
                     <TableCell
                       style={{
