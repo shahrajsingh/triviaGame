@@ -9,6 +9,27 @@ AWS.config.update({
 
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 
+export const updateUserLoginStatus = async (userEmail, isLoggedIn) => {
+  const params = {
+    TableName: 'TriviaUsers',
+    Key: {
+      userEmail
+    },
+    UpdateExpression: 'set isLoggedIn = :value',
+    ExpressionAttributeValues: {
+      ':value': isLoggedIn
+    },
+    ReturnValues: 'UPDATED_NEW'
+  };
+
+  try {
+    const data = await dynamodb.update(params).promise();
+    console.info('Login status updated', data);
+  } catch (err) {
+    console.error('Error', err);
+  }
+};
+
 export const fetchDataFromDynamoDB = async (tableName)=>{
   const fetchDataPromise = new Promise((resolve,reject)=>{
     dynamodb.scan({TableName: tableName}, function(err,data){
@@ -30,7 +51,9 @@ export const storeDataInDynamoDB = async (userEmail,userName,userFullname, quest
         'userEmail': userEmail,
         'userName': userName,
         'userFullName': userFullname,
-        'qa2fa': questionsAndAnswers
+        'qa2fa': questionsAndAnswers,
+        "isLoggedIn": false,
+        "isAdmin": false
       }
     };
   
