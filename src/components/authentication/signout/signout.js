@@ -3,25 +3,32 @@ import { auth } from "../firebase";
 import { useAuth } from '../authContext';
 import React from 'react';
 import { signOut } from "firebase/auth";
-import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 
 const Signout = (props) => {
+    const defaultStyle = {
+        position: 'relative'
+    }
 
     const { setIsAuthenticated } = useAuth();
 
+    const logout = (() => {
+        signOut(auth).then(() => {
+            setIsAuthenticated(false);
+            window.localStorage.removeItem("userEmail");
+            window.localStorage.removeItem("userName");
+            window.localStorage.removeItem("userFullName");
+        }).catch((error) => {
+            alert(error.message);
+        })
+    });
+
     return (
-        <Button color="inherit" startIcon={<ExitToAppIcon />}
-            onClick={()=>{
-                signOut(auth).then(()=>{
-                    setIsAuthenticated(false);
-                    window.localStorage.removeItem("userEmail");
-                    window.localStorage.removeItem("userName");
-                    window.localStorage.removeItem("userFullName");
-                }).catch((error)=>{
-                    alert(error.message);
-                })
+        <Button sx={props?.styles ? props.styles : defaultStyle}
+            variant="contained"
+            onClick={() => {
+                logout();
             }}>
-            Logout
+            Log-out
         </Button>
     )
 

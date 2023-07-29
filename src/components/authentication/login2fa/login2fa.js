@@ -38,15 +38,7 @@ const Login2fa = () => {
             } else {
                 const res = data.Payload;
                 if(res.includes("200") && res.includes("Answers matched")){
-                    getDataFromDynamoDB(user).then((res)=>{
-                        window.localStorage.setItem("userName", res.Item.userName);
-                        window.localStorage.setItem("userFullName", res.Item.userFullName);
-                        setIsAuthenticated(true);
-                    },(error)=>{
-                        console.error(error);
-                        alert("error while fetching user data");
-                    })
-                    
+                    setIsAuthenticated(true);
                 }else{
                     alert("2fa not verified please try again");
                     setIsAuthenticated(false);
