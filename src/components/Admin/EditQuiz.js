@@ -95,7 +95,9 @@ const EditQuiz = () => {
     correctAnswer: "",
     options: ["", "", "", ""],
     question: "",
+    questionTag: ["", ""],
   });
+  const [tags, setTags] = useState([]);
 
   const handleNewQuestionChange = (event) => {
     const { name, value } = event.target;
@@ -149,8 +151,9 @@ const EditQuiz = () => {
       correctAnswer: "",
       options: ["", "", "", ""],
       question: "",
+      questionTag: ["", ""],
     });
-
+    console.log(tags);
     try {
       const response = await axios.post(
         "https://d8nbpcntna.execute-api.us-east-1.amazonaws.com/serverless/addnewquestion",
@@ -161,9 +164,9 @@ const EditQuiz = () => {
           correctAnswer: newQuestion.correctAnswer,
           options: newQuestion.options,
           question: newQuestion.question,
+          questionTag: tags,
         }
       );
-
       if (response.status === 200) {
         console.log(response);
         fetchQuestions();
@@ -173,6 +176,27 @@ const EditQuiz = () => {
     } catch (error) {
       console.error("Error adding the question:", error);
     }
+  };
+
+  const handleTagQuestion = () => {
+    console.log(newQuestion.question);
+    axios
+      .post(
+        "https://us-central1-serverless-5410-387216.cloudfunctions.net/function-1",
+        {
+          question: newQuestion.question,
+        }
+      )
+      .then((res) => {
+        const categories = res.data.categories
+          .slice(0, 2)
+          .map((category) => category.replace("/", ""));
+        console.log(categories);
+        setTags(categories);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   useEffect(() => {
@@ -467,6 +491,29 @@ const EditQuiz = () => {
               </Grid>
             ))}
           </Grid>
+          <Grid container spacing={2}>
+            <Grid item xs={6}>
+              <TextField
+                fullWidth
+                name="tags"
+                value={tags}
+                onChange={handleNewQuestionChange}
+                variant="outlined"
+                sx={{ mb: 2 }}
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <Button
+                variant="contained"
+                color="secondary"
+                size="large"
+                onClick={handleTagQuestion}
+                sx={{ mb: 2 }}
+              >
+                Tag Question
+              </Button>
+            </Grid>
+          </Grid>
 
           <Button
             variant="contained"
@@ -579,6 +626,32 @@ const EditQuiz = () => {
                   </div>
                 ) : (
                   <div>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        justifyContent: "flex-end",
+                        mb: 1,
+                      }}
+                    >
+                      {tags &&
+                        question.questionTag.map((tag, tagIndex) => (
+                          <Box
+                            key={tagIndex}
+                            sx={{
+                              backgroundColor: "#f0f0f0",
+                              color: "#333",
+
+                              fontSize: "12px",
+                              fontWeight: "bold",
+                              padding: "2px 4px",
+                              borderRadius: 4,
+                              marginLeft: "4px",
+                            }}
+                          >
+                            {tag}
+                          </Box>
+                        ))}
+                    </Box>
                     <Typography variant="body1" sx={{ mb: 2 }}>
                       {question.question}
                     </Typography>
