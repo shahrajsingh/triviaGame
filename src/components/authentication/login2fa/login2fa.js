@@ -5,7 +5,7 @@ import { Button } from "@mui/material";
 import Card from '@mui/material/Card';
 import TextField from '@mui/material/TextField';
 
-import { getDataFromDynamoDB } from '../dynamoDb';
+import { getDataFromDynamoDB, updateUserLoginStatus } from '../dynamoDb';
 import { useAuth } from '../authContext';
 
 const Login2fa = () => {
@@ -38,6 +38,7 @@ const Login2fa = () => {
             } else {
                 const res = data.Payload;
                 if(res.includes("200") && res.includes("Answers matched")){
+                    updateUserLoginStatus(user,true);
                     setIsAuthenticated(true);
                 }else{
                     alert("2fa not verified please try again");
