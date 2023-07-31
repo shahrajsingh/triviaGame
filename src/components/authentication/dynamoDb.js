@@ -2,9 +2,9 @@ import * as AWS from "aws-sdk";
 
 AWS.config.update({
   region: "us-east-1",
-  accessKeyId: "ASIA4FC4IJOYUKLWPDEX",
-  secretAccessKey: "tc0Nf9CAa8dZb8Iryu/VPC4zNpOUxgfNozHNpTLc",
-  sessionToken: "FwoGZXIvYXdzEA4aDNks/qYv1wMoytp1PCK+AW9oxsr9qJsp6wds57GqAGl25I/ODqOOsYENYEzN820u/JOADLT5067lBrG/s3zgY3J2yyB+c5vJBzJRRdFaJr/AeIj4BaIRxQDm7JiFGYVAeHV3HNiCfWosQLz4y02yAOnZ3DKKs8E6tTQ7lAkEFfUW5EIMsDRz5Rq0S09Z9pql2CPCLnzWsjABLx1Imz467l5orITKuQJGibXzD5wx5vzS+IlHR77R/45UUTaAKHzt5imokA2GmMN72VMDJkUoiueVpgYyLbwFFUd/gkTKm+blfhE5uLleLLWPb/CuUkKimCv/rP7fpH0zI1jXC+km6rBoEw=="
+  accessKeyId: "ASIA4FC4IJOYZDCRVJSL",
+  secretAccessKey: "LL2l9YYTcNqZr5lTdIaCdwmB2kQ/RkMBSD26URNB",
+  sessionToken: "FwoGZXIvYXdzEDsaDDgyssuQKdo2nB10IiK+AUIV6rju7CeZgHWiYBXOfKhpi1qH1TIWE7Zjb3BTek9r2ytWf3ufoIWuagUvH9DNZsHKunGF02eMH7z7xclgELO6j1gHXtCN0EOpxTqcmeV+kSzfbDM0yw9pgHHmgSpXs0uEJH0jDDVe0W7OB7fCXAGHX4D/PPvQ4ldhRlj2ZoZgLJ4bQRubzRwOtN5bFqknJ0jUelLmkwxXGJQ3N0jnfJNifcig3rmuozIpqioJTbfQHLP4f/41gwkqwsUPF/Uo/eCfpgYyLUjcZjS+Jq8cs/CU5zV/c+ICPayiTMQJ+cdCwpEqkHSBv6yFvwpZTb4bra6j4A=="
 });
 
 const dynamodb = new AWS.DynamoDB.DocumentClient();
