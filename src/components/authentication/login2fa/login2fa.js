@@ -5,7 +5,7 @@ import { Button } from "@mui/material";
 import Card from '@mui/material/Card';
 import TextField from '@mui/material/TextField';
 
-import { getDataFromDynamoDB } from '../dynamoDb';
+import { getDataFromDynamoDB, updateUserLoginStatus } from '../dynamoDb';
 import { useAuth } from '../authContext';
 
 const Login2fa = () => {
@@ -18,6 +18,8 @@ const Login2fa = () => {
     const [ans, setAns] = useState("");
     const [loading, setLoading] = useState(true);
     const user = window.localStorage.getItem("userEmail");
+    const [userName, setUserName] = useState("");
+    const [userFullName, setUserFullName] = useState("");
 
     const submitLogin2fa = async (event) => {
         event.preventDefault();
@@ -38,6 +40,11 @@ const Login2fa = () => {
             } else {
                 const res = data.Payload;
                 if(res.includes("200") && res.includes("Answers matched")){
+                    updateUserLoginStatus(user,true);
+                    window.localStorage.clear();
+                    window.localStorage.setItem("userEmail", user);
+                    window.localStorage.setItem("userName", userName);
+                    window.localStorage.setItem("userFullName", userFullName);
                     setIsAuthenticated(true);
                 }else{
                     alert("2fa not verified please try again");
@@ -52,7 +59,10 @@ const Login2fa = () => {
             alert("Error while fetching 2fa data");
         } else {
             await getDataFromDynamoDB(user).then((result) => {
+                console.log(result);
                 const qalist = result?.Item?.qa2fa;
+                setUserFullName(result?.Item?.userFullName);
+                setUserName(result?.Item?.userName);
                 if (qalist) {
                     const randomInteger = Math.floor(Math.random() * 3);
                     Object.keys(qalist).forEach((key, index) => {

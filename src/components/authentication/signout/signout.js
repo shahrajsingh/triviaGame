@@ -3,6 +3,7 @@ import { auth } from "../firebase";
 import { useAuth } from '../authContext';
 import React from 'react';
 import { signOut } from "firebase/auth";
+import { updateUserLoginStatus } from "../dynamoDb";
 
 const Signout = (props) => {
     const defaultStyle = {
@@ -14,9 +15,11 @@ const Signout = (props) => {
     const logout = (() => {
         signOut(auth).then(() => {
             setIsAuthenticated(false);
+            updateUserLoginStatus(window.localStorage.getItem("userEmail"),false);
             window.localStorage.removeItem("userEmail");
             window.localStorage.removeItem("userName");
             window.localStorage.removeItem("userFullName");
+
         }).catch((error) => {
             alert(error.message);
         })
