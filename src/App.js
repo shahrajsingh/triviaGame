@@ -9,11 +9,6 @@ function App() {
     <div className="App">
       <Navbar></Navbar>
       dashboard
-      <Link to="/admin/home">
-        <Button variant="contained" color="primary">
-          Create New Quiz
-        </Button>
-      </Link>
     </div>
   );
 }

@@ -82,7 +82,11 @@ const router = createBrowserRouter([
   },
   {
     path: "/admin/home",
-    element: <QuizHome />,
+    element: (
+      <AuthProvider>
+        <QuizHome />
+      </AuthProvider>
+    ),
   },
   {
     path: "/admin/createquiz",
