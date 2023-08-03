@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Typography, Box, Container, ListItem, List } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import Lex from "../Lex/Lex";
+import ChatBox from "./ChatBox";
 
 const Quiz = () => {
   const changePage = useNavigate();
@@ -349,6 +351,7 @@ const Quiz = () => {
           </List>
         </Box>
       </Container>
+      <ChatBox teamId="ijkl" gameId="abcd" />
     </Box>
   );
 };
