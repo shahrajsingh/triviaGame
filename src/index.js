@@ -19,6 +19,7 @@ import CreateQuiz from "./components/Admin/CreateQuiz";
 import EditQuiz from "./components/Admin/EditQuiz";
 import Lobby from "./components/lobby/Lobby";
 import Leaderboard from "./pages/leaderboards/leaderboards";
+import Lex from "./components/Lex/Lex";
 
 const router = createBrowserRouter([
   {
@@ -83,11 +84,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/admin/home",
-    element: (
-      <AuthProvider>
-        <QuizHome />
-      </AuthProvider>
-    ),
+    element: <QuizHome />,
   },
   {
     path: "/admin/createquiz",
@@ -103,8 +100,12 @@ const router = createBrowserRouter([
   },
   {
     path: "/leaderboard",
-    element: <Leaderboard></Leaderboard>
-  }
+    element: <Leaderboard></Leaderboard>,
+  },
+  {
+    path: "/chat",
+    element: <Lex />,
+  },
 ]);
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
