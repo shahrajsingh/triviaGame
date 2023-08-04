@@ -18,6 +18,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { purple, blue, teal, red, yellow, green } from "@mui/material/colors";
 import { Visibility, HowToReg } from "@mui/icons-material";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const theme = createTheme({
   palette: {
@@ -41,8 +42,9 @@ const Lobby = () => {
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedDifficulty, setSelectedDifficulty] = useState("");
   const [selectedTimeLimit, setSelectedTimeLimit] = useState(0);
-
   const [quizData, setQuizData] = useState([]);
+
+  const navigate = useNavigate();
   const fetchQuizData = async () => {
     try {
       const response = await axios.get(
@@ -57,7 +59,6 @@ const Lobby = () => {
     }
   };
 
-  // Fetch quiz data when the component mounts
   useEffect(() => {
     fetchQuizData();
   }, []);
@@ -103,6 +104,17 @@ const Lobby = () => {
       (expiryDate ? expiryDate > new Date() : false)
     );
   });
+
+  const handleJoinQuiz = (quiz) => {
+    const teamId = window.localStorage.getItem("teamId");
+    const teamName = window.localStorage.getItem("teamName");
+    const userName = window.localStorage.getItem("userName");
+    const userEmail = window.localStorage.getItem("userEmail");
+
+    navigate(
+      `/buffer?quiznumber=${quiz.quizNumber}&teamid=${teamId}&teamname=${teamName}&userName=${userName}&useremail=${userEmail}&start=${quiz.quizStartTime}`
+    );
+  };
 
   return (
     <ThemeProvider theme={theme}>
@@ -326,8 +338,7 @@ const Lobby = () => {
                         startIcon={<HowToReg />}
                         onClick={(e) => {
                           e.stopPropagation();
-                          //join logic
-                          console.log(`Joining quiz ${quiz.quizNumber}`);
+                          handleJoinQuiz(quiz);
                         }}
                       >
                         Join

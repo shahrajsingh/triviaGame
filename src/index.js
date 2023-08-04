@@ -20,6 +20,7 @@ import EditQuiz from "./components/Admin/EditQuiz";
 import Lobby from "./components/lobby/Lobby";
 import Leaderboard from "./pages/leaderboards/leaderboards";
 import TeamView from "./pages/teamView/TeamView";
+import BufferPage from "./components/lobby/BufferPage";
 
 const router = createBrowserRouter([
   {
@@ -46,10 +47,7 @@ const router = createBrowserRouter([
         path: "/profile",
         element: <ProfileHome />,
       },
-      {
-        path: "/startquiz",
-        element: <Quiz />,
-      },
+
       {
         path: "/admin/home",
         element: <QuizHome />,
@@ -73,9 +71,13 @@ const router = createBrowserRouter([
       
       {
         path: "/teamview",
-        element: <TeamView></TeamView> 
-      }
-    ]
+        element: <TeamView></TeamView>,
+      },
+      {
+        path: "/buffer",
+        element: <BufferPage />,
+      },
+    ],
   },
   {
     path: "/login",
@@ -108,8 +110,11 @@ const router = createBrowserRouter([
         <Signup2fa></Signup2fa>
       </AuthProvider>
     ),
-  }
-  
+  },
+  {
+    path: "/startquiz",
+    element: <Quiz />,
+  },
 ]);
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
