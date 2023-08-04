@@ -70,11 +70,15 @@ const Leaderboard = () => {
           { category: categ }
         )
         .then((res) => {
-          processPlayerData(res.data);
+          let unsortedData = [...res.data];
+          unsortedData.sort(function (a, b) {
+            return parseInt(b.userPoints) - parseInt(a.userPoints);
+          });
+          processPlayerData(unsortedData);
         })
         .catch((error) => {
           console.error(error);
-          //alert("error while fetching player leaderbaord");
+          alert("error while fetching player leaderbaord");
         });
     } else {
       await axios
@@ -83,11 +87,15 @@ const Leaderboard = () => {
           {}
         )
         .then((res) => {
-          processPlayerData(res.data);
+          let unsortedData = [...res.data];
+          unsortedData.sort(function (a, b) {
+            return parseInt(b.userPoints) - parseInt(a.userPoints);
+          });
+          processPlayerData(unsortedData);
         })
         .catch((error) => {
           console.error(error);
-          //alert("error while fetching player leaderbaord");
+          alert("error while fetching player leaderbaord");
         });
     }
   };
@@ -114,7 +122,11 @@ const Leaderboard = () => {
           { category: categ }
         )
         .then((res) => {
-          processTeamData(res.data);
+          let unsortedData = [...res.data];
+          unsortedData.sort(function (a, b) {
+            return parseInt(b.teamPoints) - parseInt(a.teamPoints);
+          });
+          processTeamData(unsortedData);
         })
         .catch((error) => {
           console.error(error);
@@ -127,7 +139,11 @@ const Leaderboard = () => {
           {}
         )
         .then((res) => {
-          processTeamData(res.data);
+          let unsortedData = [...res.data];
+          unsortedData.sort(function (a, b) {
+            return parseInt(b.teamPoints) - parseInt(a.teamPoints);
+          });
+          processTeamData(unsortedData);
         })
         .catch((error) => {
           console.error(error);
@@ -135,6 +151,10 @@ const Leaderboard = () => {
         });
     }
   };
+
+  useEffect(() => {
+    setDetailedStatics(null);
+  }, [leaderboardType]);
 
   useEffect(() => {
     // Simulating API call with mock response
@@ -166,7 +186,7 @@ const Leaderboard = () => {
           },
         }}
       >
-        <Paper style={{ width: "70%", height: "99%", overflowY: "scroll" }}>
+        <Paper style={{ width: "60%", height: "99%", overflowY: "scroll" }}>
           <Box>
             {leaderboardType === "player" ? (
               <>
@@ -174,6 +194,8 @@ const Leaderboard = () => {
                   title="Player Leaderboard"
                   rankings={playerRankings}
                   isLoading={isLoading}
+                  setDetailedStatics={setDetailedStatics}
+                  detailedStatistics={detailedStatistics}
                 />
               </>
             ) : (
@@ -182,6 +204,7 @@ const Leaderboard = () => {
                   title="Team Leaderboard"
                   rankings={teamRankings}
                   isLoading={isLoading}
+                  setDetailedStatics={setDetailedStatics}
                 />
               </>
             )}
@@ -192,15 +215,17 @@ const Leaderboard = () => {
             flexGrow: 1,
             display: "flex",
             flexFlow: "column",
-            justifyContent: "center",
-            alignItems: "center",
+            paddingTop: "0.2rem",
+            height: "99%",
           }}
         >
           {detailedStatistics ? (
-            <></>
+            <>
+              <Details details={detailedStatistics}></Details>
+            </>
           ) : (
             <>
-              <Typography variant="h5">
+              <Typography variant="p">
                 Please select a row form leaderboard to view details
               </Typography>
             </>
@@ -293,9 +318,9 @@ const Filter = ({
   );
 };
 
-const RankingTable = ({ title, rankings, isLoading }) => (
+const RankingTable = ({ title, rankings, isLoading, setDetailedStatics }) => (
   <div className="leaderboard-table-container" style={{ position: "relative" }}>
-    <Table stickyHeader style={{ position: "fixed", maxWidth: "45.7%" }}>
+    <Table stickyHeader style={{ position: "fixed", maxWidth: "48%" }}>
       <TableHead>
         <TableRow>
           <TableCell className="leaderboard-table-cell">Rank</TableCell>
@@ -308,7 +333,15 @@ const RankingTable = ({ title, rankings, isLoading }) => (
     </Table>
     <TableContainer>
       {isLoading ? (
-        <div style={{"display":"flex", flexFlow:"column",justifyContent:"center",alignItems:"center", marginTop: "4rem"}}>
+        <div
+          style={{
+            display: "flex",
+            flexFlow: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            marginTop: "4rem",
+          }}
+        >
           <h4>Loading Data</h4>
           <CircularProgress></CircularProgress>
         </div>
@@ -332,15 +365,30 @@ const RankingTable = ({ title, rankings, isLoading }) => (
                       key={i}
                       style={{ cursor: "pointer" }}
                     >
-                      <TableCell className="leaderboard-table-cell">
+                      <TableCell
+                        onClick={() => {
+                          setDetailedStatics(row);
+                        }}
+                        className="leaderboard-table-cell"
+                      >
                         {row.rank}
                       </TableCell>
-                      <TableCell className="leaderboard-table-cell">
+                      <TableCell
+                        className="leaderboard-table-cell"
+                        onClick={() => {
+                          setDetailedStatics(row);
+                        }}
+                      >
                         {title.includes("Player")
                           ? row.user_name
                           : row.team_name}
                       </TableCell>
-                      <TableCell className="leaderboard-table-cell">
+                      <TableCell
+                        className="leaderboard-table-cell"
+                        onClick={() => {
+                          setDetailedStatics(row);
+                        }}
+                      >
                         {title.includes("Player")
                           ? row.userPoints
                           : row.teamPoints}
@@ -356,5 +404,108 @@ const RankingTable = ({ title, rankings, isLoading }) => (
     </TableContainer>
   </div>
 );
+
+const Details = ({ details }) => {
+  const [data, setData] = useState(null);
+  const [isLoadingData, setIsLoadingData] = useState(false);
+
+  useEffect(() => {
+    setIsLoadingData(true);
+    if (details.user_id) {
+      axios
+        .post(
+          "https://us-central1-sdp-project-392915.cloudfunctions.net/function-10",
+          { user_id: details.user_id }
+        )
+        .then((res) => {
+          let resData = res.data;
+          Object.assign(resData, details);
+          setData(resData);
+          setIsLoadingData(false);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    } else if (details.team_id) {
+      axios
+        .post(
+          "https://us-central1-sdp-project-392915.cloudfunctions.net/function-5",
+          { team_id: details.team_id }
+        )
+        .then((res) => {
+          let resData = res.data;
+          Object.assign(resData, details);
+          setData(resData);
+          setIsLoadingData(false);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    } else {
+      console.error("wrong key selected");
+    }
+  }, [details]);
+  return (
+    <>
+      {isLoadingData ? (
+        <>
+          <div
+            style={{
+              display: "flex",
+              flexFlow: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              marginTop: "4rem",
+            }}
+          >
+            <h4>Loading Data</h4>
+            <CircularProgress></CircularProgress>
+          </div>
+        </>
+      ) : (
+        <>
+          <TableContainer component={"paper"}>
+            <Table>
+              <TableBody>
+                <TableRow>
+                  <TableCell>
+                    {data?.team_name ? "Team Name" : "Player Name"}
+                  </TableCell>
+                  <TableCell>
+                    {data?.team_name ? data?.team_name : data?.user_name}
+                  </TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>Rank </TableCell>
+                  <TableCell>{data?.rank}</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>Total Points </TableCell>
+                  <TableCell>{data?.totalPoints}</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>Total Games Played </TableCell>
+                  <TableCell>{data?.numberOfDocumentsRetrieved}</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>Total Games Won </TableCell>
+                  <TableCell>{data?.gamesWon}</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>Total Games Lost </TableCell>
+                  <TableCell>{data?.numberOfDocumentsRetrieved - data?.gamesWon}</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>Win Rate </TableCell>
+                  <TableCell>{(data?.gamesWon / data?.numberOfDocumentsRetrieved) * 100} %</TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </>
+      )}
+    </>
+  );
+};
 
 export default Leaderboard;
