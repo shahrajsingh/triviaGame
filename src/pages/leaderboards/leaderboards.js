@@ -29,30 +29,13 @@ const mockPlayerData = [
   
 ];
 
-const mockTeamData = [
-  // Add team data here...
-  { rank: 1, name: "The Quizzards", score: 5000, gamesPlayed: 50, winRate: 70 },
-  {
-    rank: 2,
-    name: "Trivia Masters",
-    score: 4800,
-    gamesPlayed: 45,
-    winRate: 65,
-  },
-];
-
-// Mock API response
-const mockAPIResponse = {
-  players: mockPlayerData,
-  teams: mockTeamData,
-};
-
 const Leaderboard = () => {
   const [timeFrame, setTimeFrame] = useState("all-time");
   const [playerRankings, setPlayerRankings] = useState([]);
   const [teamRankings, setTeamRankings] = useState([]);
   const [leaderboardType, setleaderboardType] = useState("player");
   const [detailedStatistics, setDetailedStatics] = useState(null);
+  const [category, setCategory] = useState("");
 
   const userDetails = {
     userFullName: window.localStorage.getItem("userFullName"),
@@ -80,10 +63,35 @@ const Leaderboard = () => {
     }
   };
 
+  const getTeamData = async (categ)=>{
+    if(categ && categ !== ""){
+      await axios.post("https://us-central1-sdp-project-392915.cloudfunctions.net/function-7", {category: categ}).then((res)=>{
+        console.log(res);
+        setPlayerRankings(res.data);
+      }).catch((error)=>{
+        console.error(error);
+        //alert("error while fetching player leaderbaord");
+      });
+    }else{
+      await axios.post("https://us-central1-sdp-project-392915.cloudfunctions.net/function-6", {}).then((res)=>{
+        console.log(res);
+        setPlayerRankings(res.data);
+    }).catch((error)=>{
+      console.error(error);
+      //alert("error while fetching player leaderbaord");
+    });
+    }
+  }
+
   useEffect(() => {
     // Simulating API call with mock response
-    getPlayerData("");
-  }, [timeFrame]);
+    if(leaderboardType === "player"){
+      getPlayerData(category);
+    }else{
+      getTeamData(category);
+    }
+   
+  }, [leaderboardType, timeFrame,category]);
 
   return (
     <div className="container">
@@ -92,6 +100,8 @@ const Leaderboard = () => {
         timeFrame={timeFrame}
         setLeaderboard={setleaderboardType}
         leaderboardType={leaderboardType}
+        category={category}
+        setCategory={setCategory}
       />
       <Box
         sx={{
@@ -143,9 +153,20 @@ const Filter = ({
   timeFrame,
   setLeaderboard,
   leaderboardType,
+  setCategory,
+  category
 }) => {
   const handleFilterChange = (e) => {
     setTimeFrame(e.target.value);
+  };
+
+  const handleCategoryChange = (e) =>{
+    if(e.target.value === "any"){
+      setCategory("");
+    }else{
+      setCategory(e.target.value);
+    }
+    
   };
 
   return (
@@ -179,6 +200,18 @@ const Filter = ({
           >
             Team
           </Button>
+          <Select
+            className="select-cetagory"
+            labelId="time-cetagory-select"
+            id="time-category-item"
+            value={category ? category:"any"}
+            label="Select Category"
+            onChange={handleCategoryChange}
+          >
+            <MenuItem value={"any"}>Any Category</MenuItem>
+            <MenuItem value={"geography"}>Geography</MenuItem>
+            <MenuItem value={"science"}>Science</MenuItem>
+          </Select>
           <Select
             className="select-time-range"
             labelId="time-range-select"
