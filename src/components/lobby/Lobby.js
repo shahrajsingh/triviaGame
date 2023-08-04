@@ -92,7 +92,7 @@ const Lobby = () => {
   };
 
   const filteredQuizzes = quizData.filter((quiz) => {
-    const expiryDate = convertToValidDate(quiz.quizExpiry);
+    const expiryDate = convertToValidDate(quiz.quizStartTime);
     const selectedTimeLimitInMinutes = selectedTimeLimit;
     const quizTimeLimitInMinutes = Number(quiz.timeLimit);
     return (
@@ -227,7 +227,7 @@ const Lobby = () => {
                     fontWeight: "bold",
                   }}
                 >
-                  Expiry
+                  Start Time
                 </TableCell>
                 <TableCell
                   align="center"
@@ -304,7 +304,7 @@ const Lobby = () => {
                       {quiz.timeLimit} mins
                     </TableCell>
                     <TableCell style={{ fontSize: "14px" }}>
-                      {quiz.quizExpiry}
+                      {quiz.quizStartTime}
                     </TableCell>
                     <TableCell align="center">
                       <Button

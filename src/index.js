@@ -31,17 +31,17 @@ const router = createBrowserRouter([
         <App></App>
       </AuthProvider>
     ),
-    children:[
+    children: [
       {
         path: "/create_team",
         element: <CreateTeam></CreateTeam>,
       },
       {
-        path: "/teamstats/id",
+        path: "/teamstats/:id",
         element: <TeamStats></TeamStats>,
       },
       {
-        path: "/manageteam/id",
+        path: "/manageteam/:id",
         element: <ManageTeam></ManageTeam>,
       },
       {
@@ -82,9 +82,9 @@ const router = createBrowserRouter([
       },
       {
         path: "/teamview",
-        element: <TeamView></TeamView> 
-      }
-    ]
+        element: <TeamView></TeamView>,
+      },
+    ],
   },
   {
     path: "/login",
@@ -117,8 +117,7 @@ const router = createBrowserRouter([
         <Signup2fa></Signup2fa>
       </AuthProvider>
     ),
-  }
-  
+  },
 ]);
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
