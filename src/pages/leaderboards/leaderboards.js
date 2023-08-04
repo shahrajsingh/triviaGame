@@ -70,11 +70,15 @@ const Leaderboard = () => {
           { category: categ }
         )
         .then((res) => {
-          processPlayerData(res.data);
+          let unsortedData = [...res.data];
+          unsortedData.sort(function (a, b) {
+            return parseInt(b.userPoints) - parseInt(a.userPoints);
+          });
+          processPlayerData(unsortedData);
         })
         .catch((error) => {
           console.error(error);
-          //alert("error while fetching player leaderbaord");
+          alert("error while fetching player leaderbaord");
         });
     } else {
       await axios
@@ -83,11 +87,15 @@ const Leaderboard = () => {
           {}
         )
         .then((res) => {
-          processPlayerData(res.data);
+          let unsortedData = [...res.data];
+          unsortedData.sort(function (a, b) {
+            return parseInt(b.userPoints) - parseInt(a.userPoints);
+          });
+          processPlayerData(unsortedData);
         })
         .catch((error) => {
           console.error(error);
-          //alert("error while fetching player leaderbaord");
+          alert("error while fetching player leaderbaord");
         });
     }
   };
@@ -114,7 +122,11 @@ const Leaderboard = () => {
           { category: categ }
         )
         .then((res) => {
-          processTeamData(res.data);
+          let unsortedData = [...res.data];
+          unsortedData.sort(function (a, b) {
+            return parseInt(b.teamPoints) - parseInt(a.teamPoints);
+          });
+          processTeamData(unsortedData);
         })
         .catch((error) => {
           console.error(error);
@@ -127,7 +139,11 @@ const Leaderboard = () => {
           {}
         )
         .then((res) => {
-          processTeamData(res.data);
+          let unsortedData = [...res.data];
+          unsortedData.sort(function (a, b) {
+            return parseInt(b.teamPoints) - parseInt(a.teamPoints);
+          });
+          processTeamData(unsortedData);
         })
         .catch((error) => {
           console.error(error);
@@ -136,10 +152,10 @@ const Leaderboard = () => {
     }
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     setDetailedStatics(null);
   }, [leaderboardType]);
-  
+
   useEffect(() => {
     // Simulating API call with mock response
     if (leaderboardType === "player") {
@@ -465,6 +481,10 @@ const Details = ({ details }) => {
                   <TableCell>{data?.rank}</TableCell>
                 </TableRow>
                 <TableRow>
+                  <TableCell>Total Points </TableCell>
+                  <TableCell>{data?.totalPoints}</TableCell>
+                </TableRow>
+                <TableRow>
                   <TableCell>Total Games Played </TableCell>
                   <TableCell>{data?.numberOfDocumentsRetrieved}</TableCell>
                 </TableRow>
@@ -473,8 +493,12 @@ const Details = ({ details }) => {
                   <TableCell>{data?.gamesWon}</TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell>Total Points </TableCell>
-                  <TableCell>{data?.totalPoints}</TableCell>
+                  <TableCell>Total Games Lost </TableCell>
+                  <TableCell>{data?.numberOfDocumentsRetrieved - data?.gamesWon}</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>Win Rate </TableCell>
+                  <TableCell>{(data?.gamesWon / data?.numberOfDocumentsRetrieved) * 100} %</TableCell>
                 </TableRow>
               </TableBody>
             </Table>
