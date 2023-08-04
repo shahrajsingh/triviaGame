@@ -31,6 +31,60 @@ const router = createBrowserRouter([
         <App></App>
       </AuthProvider>
     ),
+    children:[
+      {
+        path: "/create_team",
+        element: <CreateTeam></CreateTeam>,
+      },
+      {
+        path: "/teamstats/id",
+        element: <TeamStats></TeamStats>,
+      },
+      {
+        path: "/manageteam/id",
+        element: <ManageTeam></ManageTeam>,
+      },
+      {
+        path: "/profile",
+        element: <ProfileHome />,
+      },
+      {
+        path: "/startquiz",
+        element: <Quiz />,
+      },
+      {
+        path: "/admin/home",
+        element: <QuizHome />,
+      },
+      {
+        path: "/admin/createquiz",
+        element: <CreateQuiz />,
+      },
+      {
+        path: "/admin/editquiz/:encodedQuizData",
+        element: <EditQuiz />,
+      },
+      {
+        path: "/lobby",
+        element: <Lobby />,
+      },
+      {
+        path: "/leaderboard",
+        element: <Leaderboard></Leaderboard>,
+      },
+      {
+        path: "/create2fa",
+        element: (
+          <AuthProvider>
+            <Signup2fa></Signup2fa>
+          </AuthProvider>
+        ),
+      },
+      {
+        path: "/teamview",
+        element: <TeamView></TeamView> 
+      }
+    ]
   },
   {
     path: "/login",
@@ -63,59 +117,8 @@ const router = createBrowserRouter([
         <Signup2fa></Signup2fa>
       </AuthProvider>
     ),
-  },
-  {
-    path: "/create_team",
-    element: <CreateTeam></CreateTeam>,
-  },
-  {
-    path: "/teamstats/id",
-    element: <TeamStats></TeamStats>,
-  },
-  {
-    path: "/manageteam/id",
-    element: <ManageTeam></ManageTeam>,
-  },
-  {
-    path: "/profile",
-    element: <ProfileHome />,
-  },
-  {
-    path: "/startquiz",
-    element: <Quiz />,
-  },
-  {
-    path: "/admin/home",
-    element: <QuizHome />,
-  },
-  {
-    path: "/admin/createquiz",
-    element: <CreateQuiz />,
-  },
-  {
-    path: "/admin/editquiz/:encodedQuizData",
-    element: <EditQuiz />,
-  },
-  {
-    path: "/lobby",
-    element: <Lobby />,
-  },
-  {
-    path: "/leaderboard",
-    element: <Leaderboard></Leaderboard>,
-  },
-  {
-    path: "/create2fa",
-    element: (
-      <AuthProvider>
-        <Signup2fa></Signup2fa>
-      </AuthProvider>
-    ),
-  },
-  {
-    path: "/teamview",
-    element: <TeamView></TeamView> 
   }
+  
 ]);
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
