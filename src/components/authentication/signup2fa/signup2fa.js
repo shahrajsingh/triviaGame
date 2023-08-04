@@ -55,7 +55,7 @@ const Signup2fa = () => {
 
     const submitUserDetails = useCallback(async (event) => {
         event.preventDefault();
-        const fullName = firstName + " " + lastName;
+        const fullName = firstName.toLowerCase() + " " + lastName.toLowerCase();
         setUserFullName(fullName);
         window.localStorage.setItem("userName", userName);
         window.localStorage.setItem("userFullName", fullName);
