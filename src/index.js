@@ -20,6 +20,7 @@ import EditQuiz from "./components/Admin/EditQuiz";
 import Lobby from "./components/lobby/Lobby";
 import Leaderboard from "./pages/leaderboards/leaderboards";
 import Lex from "./components/Lex/Lex";
+import ChatBox from "./components/in-game/ChatBox";
 
 const router = createBrowserRouter([
   {
@@ -105,6 +106,10 @@ const router = createBrowserRouter([
   {
     path: "/chat",
     element: <Lex />,
+  },
+  {
+    path: "/inchat",
+    element: <ChatBox teamId="ijkl" gameId="abcd" />,
   },
 ]);
 
