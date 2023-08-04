@@ -3,6 +3,7 @@ import Stats from "./Stats";
 import Profile from "./Profile";
 import { Grid } from "@material-ui/core";
 import TeamAffiliation from "./TeamAffiliation";
+import Lex from "../Lex/Lex";
 
 const ProfileHome = () => {
   return (
@@ -39,6 +40,7 @@ const ProfileHome = () => {
           ></Grid>
         </Grid>
       </Grid>
+      <Lex />
     </Grid>
   );
 };
