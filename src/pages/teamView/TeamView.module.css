@@ -1,0 +1,41 @@
+.vtcontainer {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+    background-color: white;
+}
+
+.team-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.team-table th,
+.team-table td {
+    border: 1px solid gray;
+    padding: 10px 15px;
+}
+
+.joinbtn {
+    background-color: pink;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 3px;
+}
+
+.createteambtn {
+    display: block;
+    width: 100%;
+    background-color: gray;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    border-radius: 3px;
+}
+
+.separator {
+    text-align: center;
+    margin: 20px 0;
+}
