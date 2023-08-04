@@ -30,17 +30,17 @@ const router = createBrowserRouter([
         <App></App>
       </AuthProvider>
     ),
-    children: [
+    children:[
       {
         path: "/create_team",
         element: <CreateTeam></CreateTeam>,
       },
       {
-        path: "/teamstats/:id",
+        path: "/teamstats/id",
         element: <TeamStats></TeamStats>,
       },
       {
-        path: "/manageteam/:id",
+        path: "/manageteam/id",
         element: <ManageTeam></ManageTeam>,
       },
       {
@@ -68,14 +68,7 @@ const router = createBrowserRouter([
         path: "/leaderboard",
         element: <Leaderboard></Leaderboard>,
       },
-      {
-        path: "/create2fa",
-        element: (
-          <AuthProvider>
-            <Signup2fa></Signup2fa>
-          </AuthProvider>
-        ),
-      },
+      
       {
         path: "/teamview",
         element: <TeamView></TeamView>,

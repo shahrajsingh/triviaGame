@@ -14,19 +14,23 @@ import "./leaderboard.css";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import Box from "@mui/material/Box";
-import { AppBar, Button, Toolbar } from "@mui/material";
+import { AppBar, Button, CircularProgress, Toolbar } from "@mui/material";
 import axios from "axios";
 
 // Mock data for players and teams
 const mockPlayerData = [
   // Add player data here...
   { rank: 1, name: "John Doe", score: 2000, gamesPlayed: 20, winRate: 60 },
-  { rank: 2, name: "Jane Doe", score: 1800, gamesPlayed: 18, winRate: 55 },{ rank: 1, name: "John Doe", score: 2000, gamesPlayed: 20, winRate: 60 },
-  { rank: 2, name: "Jane Doe", score: 1800, gamesPlayed: 18, winRate: 55 },{ rank: 1, name: "John Doe", score: 2000, gamesPlayed: 20, winRate: 60 },
-  { rank: 2, name: "Jane Doe", score: 1800, gamesPlayed: 18, winRate: 55 },{ rank: 1, name: "John Doe", score: 2000, gamesPlayed: 20, winRate: 60 },
-  { rank: 2, name: "Jane Doe", score: 1800, gamesPlayed: 18, winRate: 55 },{ rank: 1, name: "John Doe", score: 2000, gamesPlayed: 20, winRate: 60 },
-  { rank: 2, name: "Jane Doe", score: 1800, gamesPlayed: 18, winRate: 55 },{ rank: 1, name: "John Doe", score: 2000, gamesPlayed: 20, winRate: 60 },
-  
+  { rank: 2, name: "Jane Doe", score: 1800, gamesPlayed: 18, winRate: 55 },
+  { rank: 1, name: "John Doe", score: 2000, gamesPlayed: 20, winRate: 60 },
+  { rank: 2, name: "Jane Doe", score: 1800, gamesPlayed: 18, winRate: 55 },
+  { rank: 1, name: "John Doe", score: 2000, gamesPlayed: 20, winRate: 60 },
+  { rank: 2, name: "Jane Doe", score: 1800, gamesPlayed: 18, winRate: 55 },
+  { rank: 1, name: "John Doe", score: 2000, gamesPlayed: 20, winRate: 60 },
+  { rank: 2, name: "Jane Doe", score: 1800, gamesPlayed: 18, winRate: 55 },
+  { rank: 1, name: "John Doe", score: 2000, gamesPlayed: 20, winRate: 60 },
+  { rank: 2, name: "Jane Doe", score: 1800, gamesPlayed: 18, winRate: 55 },
+  { rank: 1, name: "John Doe", score: 2000, gamesPlayed: 20, winRate: 60 },
 ];
 
 const Leaderboard = () => {
@@ -36,6 +40,7 @@ const Leaderboard = () => {
   const [leaderboardType, setleaderboardType] = useState("player");
   const [detailedStatistics, setDetailedStatics] = useState(null);
   const [category, setCategory] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const userDetails = {
     userFullName: window.localStorage.getItem("userFullName"),
@@ -43,55 +48,102 @@ const Leaderboard = () => {
     userEmail: window.localStorage.getItem("userEmail"),
   };
 
-  const getPlayerData = async(categ)=>{
-    if(categ && categ !== ""){
-      await axios.post("https://us-central1-sdp-project-392915.cloudfunctions.net/function-9", {category: categ}).then((res)=>{
-        console.log(res);
-        setPlayerRankings(res.data);
-      }).catch((error)=>{
-        console.error(error);
-        //alert("error while fetching player leaderbaord");
+  const processPlayerData = (data) => {
+    let playerData = [];
+    if (Array.isArray(data)) {
+      data.forEach((team, index) => {
+        let playerObj = team;
+        playerObj["rank"] = index + 1;
+        playerData.push(playerObj);
       });
-    }else{
-      await axios.post("https://us-central1-sdp-project-392915.cloudfunctions.net/function-8", {}).then((res)=>{
-        console.log(res);
-        setPlayerRankings(res.data);
-    }).catch((error)=>{
-      console.error(error);
-      //alert("error while fetching player leaderbaord");
-    });
+    }
+    setPlayerRankings(playerData);
+    setIsLoading(false);
+  };
+
+  const getPlayerData = async (categ) => {
+    setIsLoading(true);
+    if (categ && categ !== "") {
+      await axios
+        .post(
+          "https://us-central1-sdp-project-392915.cloudfunctions.net/function-9",
+          { category: categ }
+        )
+        .then((res) => {
+          processPlayerData(res.data);
+        })
+        .catch((error) => {
+          console.error(error);
+          //alert("error while fetching player leaderbaord");
+        });
+    } else {
+      await axios
+        .post(
+          "https://us-central1-sdp-project-392915.cloudfunctions.net/function-8",
+          {}
+        )
+        .then((res) => {
+          processPlayerData(res.data);
+        })
+        .catch((error) => {
+          console.error(error);
+          //alert("error while fetching player leaderbaord");
+        });
     }
   };
 
-  const getTeamData = async (categ)=>{
-    if(categ && categ !== ""){
-      await axios.post("https://us-central1-sdp-project-392915.cloudfunctions.net/function-7", {category: categ}).then((res)=>{
-        console.log(res);
-        setPlayerRankings(res.data);
-      }).catch((error)=>{
-        console.error(error);
-        //alert("error while fetching player leaderbaord");
+  const processTeamData = (data) => {
+    let teamData = [];
+    if (Array.isArray(data)) {
+      data.forEach((team, index) => {
+        let teamObj = team;
+        teamObj["rank"] = index + 1;
+        teamData.push(teamObj);
       });
-    }else{
-      await axios.post("https://us-central1-sdp-project-392915.cloudfunctions.net/function-6", {}).then((res)=>{
-        console.log(res);
-        setPlayerRankings(res.data);
-    }).catch((error)=>{
-      console.error(error);
-      //alert("error while fetching player leaderbaord");
-    });
     }
-  }
+    setTeamRankings(teamData);
+    setIsLoading(false);
+  };
+
+  const getTeamData = async (categ) => {
+    setIsLoading(true);
+    if (categ && categ !== "") {
+      await axios
+        .post(
+          "https://us-central1-sdp-project-392915.cloudfunctions.net/function-7",
+          { category: categ }
+        )
+        .then((res) => {
+          processTeamData(res.data);
+        })
+        .catch((error) => {
+          console.error(error);
+          //alert("error while fetching player leaderbaord");
+        });
+    } else {
+      await axios
+        .post(
+          "https://us-central1-sdp-project-392915.cloudfunctions.net/function-6",
+          {}
+        )
+        .then((res) => {
+          processTeamData(res.data);
+        })
+        .catch((error) => {
+          console.error(error);
+          //alert("error while fetching player leaderbaord");
+        });
+    }
+  };
 
   useEffect(() => {
     // Simulating API call with mock response
-    if(leaderboardType === "player"){
+    if (leaderboardType === "player") {
       getPlayerData(category);
-    }else{
+    } else {
       getTeamData(category);
     }
-   
-  }, [leaderboardType, timeFrame,category]);
+  }, [leaderboardType, timeFrame, category]);
 
   return (
     <div className="container">
@@ -106,7 +158,7 @@ const Leaderboard = () => {
       <Box
         sx={{
           display: "flex",
-          
+
           height: "calc(100% - 64px)",
           "& > :not(style)": {
             m: 1,
@@ -114,13 +166,14 @@ const Leaderboard = () => {
           },
         }}
       >
-        <Paper style={{ width: "70%",height: "99%", overflowY: "scroll" }}>
+        <Paper style={{ width: "70%", height: "99%", overflowY: "scroll" }}>
           <Box>
             {leaderboardType === "player" ? (
               <>
                 <RankingTable
                   title="Player Leaderboard"
                   rankings={playerRankings}
+                  isLoading={isLoading}
                 />
               </>
             ) : (
@@ -128,20 +181,30 @@ const Leaderboard = () => {
                 <RankingTable
                   title="Team Leaderboard"
                   rankings={teamRankings}
+                  isLoading={isLoading}
                 />
               </>
             )}
           </Box>
         </Paper>
-        <Paper style={{flexGrow: 1, display: "flex", flexFlow: "column", justifyContent: "center", alignItems: "center"}}>
-          {detailedStatistics ? (<>
-          
-          </>):(<>
-            <Typography variant="h5">
-              Please select a row form leaderboard to view details
-            </Typography>
-          </>)}
-
+        <Paper
+          style={{
+            flexGrow: 1,
+            display: "flex",
+            flexFlow: "column",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          {detailedStatistics ? (
+            <></>
+          ) : (
+            <>
+              <Typography variant="h5">
+                Please select a row form leaderboard to view details
+              </Typography>
+            </>
+          )}
         </Paper>
       </Box>
     </div>
@@ -154,19 +217,18 @@ const Filter = ({
   setLeaderboard,
   leaderboardType,
   setCategory,
-  category
+  category,
 }) => {
   const handleFilterChange = (e) => {
     setTimeFrame(e.target.value);
   };
 
-  const handleCategoryChange = (e) =>{
-    if(e.target.value === "any"){
+  const handleCategoryChange = (e) => {
+    if (e.target.value === "any") {
       setCategory("");
-    }else{
+    } else {
       setCategory(e.target.value);
     }
-    
   };
 
   return (
@@ -204,13 +266,13 @@ const Filter = ({
             className="select-cetagory"
             labelId="time-cetagory-select"
             id="time-category-item"
-            value={category ? category:"any"}
+            value={category ? category : "any"}
             label="Select Category"
             onChange={handleCategoryChange}
           >
             <MenuItem value={"any"}>Any Category</MenuItem>
-            <MenuItem value={"geography"}>Geography</MenuItem>
-            <MenuItem value={"science"}>Science</MenuItem>
+            <MenuItem value={"sports"}>Sports</MenuItem>
+            <MenuItem value={"news"}>News</MenuItem>
           </Select>
           <Select
             className="select-time-range"
@@ -231,43 +293,66 @@ const Filter = ({
   );
 };
 
-const RankingTable = ({ title, rankings }) => (
-  <div className="leaderboard-table-container" style={{position:"relative"}}>
-    <Table stickyHeader style={{position: "fixed", maxWidth: "45.7%"}}>
-    <TableHead>
-          <TableRow>
-            <TableCell className="leaderboard-table-cell">Rank</TableCell>
-            <TableCell className="leaderboard-table-cell">{title.includes("Player") ?  'Player Name':'Team Name'}</TableCell>
-            <TableCell className="leaderboard-table-cell">Score</TableCell>
-            <TableCell className="leaderboard-table-cell">Games Played</TableCell>
-            <TableCell className="leaderboard-table-cell">Win Rate</TableCell>
-          </TableRow>
-        </TableHead>
+const RankingTable = ({ title, rankings, isLoading }) => (
+  <div className="leaderboard-table-container" style={{ position: "relative" }}>
+    <Table stickyHeader style={{ position: "fixed", maxWidth: "45.7%" }}>
+      <TableHead>
+        <TableRow>
+          <TableCell className="leaderboard-table-cell">Rank</TableCell>
+          <TableCell className="leaderboard-table-cell">
+            {title.includes("Player") ? "Player Name" : "Team Name"}
+          </TableCell>
+          <TableCell className="leaderboard-table-cell">Score</TableCell>
+        </TableRow>
+      </TableHead>
     </Table>
-    <TableContainer >
-      <Table style={{marginTop: "57px"}}>
-        {(Array.isArray(rankings) && rankings.length <= 0) ? (<>
-        <TableBody>
-        <h4 style={{fontFamily: "sans-serif"}}>
-          No Leaderboard data available yet
-        </h4>
-        </TableBody>
-       
-        </>):(<>
-          <TableBody style={{overflowY: "scroll"}}>
-          {rankings.map((row, i) => (
-            <TableRow className="leaderboard-table-row" key={i} style={{cursor: "pointer"}}>
-              <TableCell className="leaderboard-table-cell">{row.rank}</TableCell>
-              <TableCell className="leaderboard-table-cell">{row.name}</TableCell>
-              <TableCell className="leaderboard-table-cell">{row.score}</TableCell>
-              <TableCell className="leaderboard-table-cell">{row.gamesPlayed}</TableCell>
-              <TableCell className="leaderboard-table-cell">{row.winRate}%</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-        </>)}
-       
-      </Table>
+    <TableContainer>
+      {isLoading ? (
+        <div style={{"display":"flex", flexFlow:"column",justifyContent:"center",alignItems:"center", marginTop: "4rem"}}>
+          <h4>Loading Data</h4>
+          <CircularProgress></CircularProgress>
+        </div>
+      ) : (
+        <>
+          <Table style={{ marginTop: "57px" }}>
+            {Array.isArray(rankings) && rankings.length <= 0 ? (
+              <>
+                <TableBody>
+                  <h4 style={{ fontFamily: "sans-serif" }}>
+                    No Leaderboard data available yet
+                  </h4>
+                </TableBody>
+              </>
+            ) : (
+              <>
+                <TableBody style={{ overflowY: "scroll" }}>
+                  {rankings.map((row, i) => (
+                    <TableRow
+                      className="leaderboard-table-row"
+                      key={i}
+                      style={{ cursor: "pointer" }}
+                    >
+                      <TableCell className="leaderboard-table-cell">
+                        {row.rank}
+                      </TableCell>
+                      <TableCell className="leaderboard-table-cell">
+                        {title.includes("Player")
+                          ? row.user_name
+                          : row.team_name}
+                      </TableCell>
+                      <TableCell className="leaderboard-table-cell">
+                        {title.includes("Player")
+                          ? row.userPoints
+                          : row.teamPoints}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </>
+            )}
+          </Table>
+        </>
+      )}
     </TableContainer>
   </div>
 );
