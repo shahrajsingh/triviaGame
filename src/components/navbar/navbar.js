@@ -8,9 +8,23 @@ import Button from "@mui/material/Button";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import GamepadIcon from "@mui/icons-material/Gamepad";
 import LeaderboardIcon from "@mui/icons-material/Leaderboard";
-import Signout from "../authentication/signout/signout";
+import { useAuth } from "../authentication/authContext";
+import { updateUserLoginStatus } from "../authentication/dynamoDb";
+import { auth } from "../authentication/firebase";
+import { signOut } from "firebase/auth";
+
+const onLogout = async () =>{
+  await signOut(auth).then((res)=>{  
+    updateUserLoginStatus(window.localStorage.getItem("userEmail"),false);
+    localStorage.clear();
+  }).catch(error=>{
+    console.error(error);
+    alert("error while logging out");
+  })
+};
 
 const Navbar = () => {
+  const {setIsAuthenticated} = useAuth();
   return (
     <div>
       <AppBar
@@ -59,6 +73,10 @@ const Navbar = () => {
               Profile
             </Button>
           </a>
+          <Button  color="error" variant="contained" className="logout-button" onClick={()=>{
+            onLogout();
+            setIsAuthenticated(false);
+          }}>Logout</Button>
         </Toolbar>
       </AppBar>
     </div>

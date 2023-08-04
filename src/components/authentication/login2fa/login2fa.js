@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import AWS from "aws-sdk";
 
 import { Button } from "@mui/material";
 import Card from '@mui/material/Card';
@@ -7,19 +6,18 @@ import TextField from '@mui/material/TextField';
 
 import { getDataFromDynamoDB, updateUserLoginStatus } from '../dynamoDb';
 import { useAuth } from '../authContext';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const Login2fa = () => {
-    AWS.config.region = "us-east-1";
-    let lambda = new AWS.Lambda();
-
     const {setIsAuthenticated} = useAuth();
-
     const [ques, setQues] = useState("");
     const [ans, setAns] = useState("");
     const [loading, setLoading] = useState(true);
     const user = window.localStorage.getItem("userEmail");
     const [userName, setUserName] = useState("");
     const [userFullName, setUserFullName] = useState("");
+    const navigate = useNavigate();
 
     const submitLogin2fa = async (event) => {
         event.preventDefault();
@@ -29,29 +27,24 @@ const Login2fa = () => {
             userAnswer: ans
         }
 
-        let params = {
-            FunctionName: "verify2fa",
-            Payload: JSON.stringify(payload)
-        }
-
-        lambda.invoke(params,function(err,data){
-            if(err){
-                alert("Error while verifying lambda");
-            } else {
-                const res = data.Payload;
-                if(res.includes("200") && res.includes("Answers matched")){
-                    updateUserLoginStatus(user,true);
-                    window.localStorage.clear();
-                    window.localStorage.setItem("userEmail", user);
-                    window.localStorage.setItem("userName", userName);
-                    window.localStorage.setItem("userFullName", userFullName);
-                    setIsAuthenticated(true);
-                }else{
-                    alert("2fa not verified please try again");
-                    setIsAuthenticated(false);
-                }
+        axios.post("https://fpdodavmf6.execute-api.us-east-1.amazonaws.com/prod/verify2fa",payload).then((res)=>{
+            if(res.data.statusCode === 200 && res.data.body === "Answers matched"){
+                updateUserLoginStatus(user,true);
+                window.localStorage.clear();
+                window.localStorage.setItem("userEmail", user);
+                window.localStorage.setItem("userName", userName);
+                window.localStorage.setItem("userFullName", userFullName);
+                setIsAuthenticated(true);
+                navigate("/");
+            }else if(res.data.statusCode === 400 && res.data.body === "Answers do not match"){
+                alert("Answer does not match, Please try again");
+            }else {
+                alert("error while verifying 2fa");
             }
-        })
+        }).catch((error)=>{
+            alert(error.message);
+            console.error(error);
+        });
     };
 
     const getData = async () => {
@@ -59,7 +52,6 @@ const Login2fa = () => {
             alert("Error while fetching 2fa data");
         } else {
             await getDataFromDynamoDB(user).then((result) => {
-                console.log(result);
                 const qalist = result?.Item?.qa2fa;
                 setUserFullName(result?.Item?.userFullName);
                 setUserName(result?.Item?.userName);
