@@ -17,6 +17,8 @@ const Login2fa = () => {
     const user = window.localStorage.getItem("userEmail");
     const [userName, setUserName] = useState("");
     const [userFullName, setUserFullName] = useState("");
+    const [isAdmin, setIsAdmin] = useState(false);
+
     const navigate = useNavigate();
 
     const submitLogin2fa = async (event) => {
@@ -34,6 +36,7 @@ const Login2fa = () => {
                 window.localStorage.setItem("userEmail", user);
                 window.localStorage.setItem("userName", userName);
                 window.localStorage.setItem("userFullName", userFullName);
+                window.localStorage.setItem("isAdmin", isAdmin);
                 setIsAuthenticated(true);
                 navigate("/");
             }else if(res.data.statusCode === 400 && res.data.body === "Answers do not match"){
@@ -55,6 +58,7 @@ const Login2fa = () => {
                 const qalist = result?.Item?.qa2fa;
                 setUserFullName(result?.Item?.userFullName);
                 setUserName(result?.Item?.userName);
+                setIsAdmin(result?.Item?.isAdmin);
                 if (qalist) {
                     const randomInteger = Math.floor(Math.random() * 3);
                     Object.keys(qalist).forEach((key, index) => {
