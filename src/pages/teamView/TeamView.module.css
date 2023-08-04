@@ -22,7 +22,7 @@
 }
 
 .teamtable th {
-    background-color: #ef5777;
+    background-color: #1769aa;
     font-weight: bolder;
     font-size: 22px;
 }
@@ -37,9 +37,9 @@
 }
 
 .joinbtn {
-    background-color: #ef5777;
+    background-color: #4dabf5;
     border: none;
-    color: white;
+    color: black;
     padding: 5px 10px;
     text-align: center;
     text-decoration: none;
@@ -60,9 +60,10 @@
 }
 
 .createteambtn {
-    background-color: #ef5777;
+    background-color: #4dabf5;
     border: none;
-    color: white;
+    color: black;
+    font-weight: bolder;
     padding: 8px 15px;
     text-align: center;
     text-decoration: none;
@@ -73,5 +74,5 @@
 }
 
 .createteambtn:hover {
-    background-color: #FFA8B3; 
+    background-color: #1769aa; 
 }

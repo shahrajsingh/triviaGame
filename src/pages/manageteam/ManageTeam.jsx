@@ -1,29 +1,25 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import classes from './Manageteam.module.css';
+import { getMembersById, removeTeamMember, promotionAdmin } from '../../services/teams';
 
 const TeamMembers = () => {
   const [teamMembers, setTeamMembers] = useState([]);
+  const [teamName, setTeamName] = useState('');
+  const [teamAdmin, setTeamAdmin] = useState('');
+  const [showPopup, setShowPopup] = useState(false);
+  const [popupMessage, setPopupMessage] = useState('');
+  
 
   useEffect(() => {
-    // Fetch team members from an API endpoint
     const fetchTeamMembers = async () => {
       try {
-        const members =[{
-            id: "heelo@",
-            name: "James Gunn"
-        },{
-            id: "hel1",
-            name: "Zack S"
-        },
-        {
-            id: "heo@",
-            name: "Peter Gunn"
-        }
-    ]
-        //const response = await axios.get('/api/team-members');
-        //setTeamMembers(response.data);
-        setTeamMembers(members);
+        const team_id = window.localStorage.getItem('teamId');
+        const team_name = window.localStorage.getItem('teamName');
+        setTeamName(team_name);
+        const response = await getMembersById(team_id);
+        console.log(response);
+        setTeamAdmin(response.admin);
+        setTeamMembers(response.members);
       } catch (error) {
         console.error(error);
       }
@@ -32,38 +28,74 @@ const TeamMembers = () => {
     fetchTeamMembers();
   }, []);
 
-  const removeMember = async (memberId) => {
+  const removeMember = async (member) => {
     try {
-      await axios.delete(`/api/team-members/${memberId}`);
-      // Refresh the list of team members after removal
-      const response = await axios.get('/api/team-members');
-      setTeamMembers(response.data);
+      const team_id = window.localStorage.getItem('teamId');
+      const user_name = window.localStorage.getItem('userName');
+      const removeData ={
+          team_id,
+          user_name,
+          member
+      };
+      const message = await removeTeamMember(removeData);
+      const response = await getMembersById(team_id);
+      console.log(response);
+      setTeamMembers(response.members);
+      setPopupMessage(message.response);
+      setShowPopup(true);
     } catch (error) {
       console.error(error);
     }
   };
 
-  const makeAdmin = async (memberId) => {
+  const makeAdmin = async (member) => {
     try {
-      await axios.post(`/api/make-admin/${memberId}`);
-      // Refresh the list of team members after making admin
-      const response = await axios.get('/api/team-members');
-      setTeamMembers(response.data);
+      const team_id = window.localStorage.getItem('teamId');
+      const user_name = window.localStorage.getItem('userName');
+      const adminData ={
+          team_id,
+          user_name,
+          member
+      };
+      const message = await promotionAdmin(adminData);
+      const response = await getMembersById(team_id);
+      console.log(response);
+      setTeamAdmin(response.admin);
+      setTeamMembers(response.members);
+      setPopupMessage(message.response);
+      setShowPopup(true);
     } catch (error) {
       console.error(error);
     }
+  };
+
+  const sortedTeamMembers = [...teamMembers].sort((a, b) => (a === teamAdmin ? -1 : b === teamAdmin ? 1 : 0));
+
+  const handleClosePopup = () => {
+    setShowPopup(false);
   };
 
   return (
     <div className={classes.container}>
-      <h2 className={classes.heading}>Team Members</h2>
+       {showPopup && (
+      <>
+      <div className={classes.overlay} onClick={handleClosePopup}></div>
+      <div className={classes.popup}>
+        <span className={classes.popupMessage}>{popupMessage}</span>
+        <button onClick={handleClosePopup} className={classes.closeButton}>Close</button>
+      </div>
+      </>)}
+      <h2 className={classes.heading}>{teamName} Members</h2>
       <ul className={classes.memberList}>
-        {teamMembers.map((member) => (
-          <li key={member.id} className={classes.memberItem}>
-            <span className={classes.memberName}>{member.name}</span>
+        {sortedTeamMembers.map((member, index) => (
+          <li key={index} className={classes.memberItem}>
+            <span className={classes.memberName}>
+              {member}
+              {member === teamAdmin && <span className={classes.adminTag}>Admin</span>} 
+            </span>
             <div className={classes.memberButtons}>
-              <button onClick={() => removeMember(member.id)} className={classes.removeButton}>Remove Member</button>
-              <button onClick={() => makeAdmin(member.id)} className={classes.makeAdminButton}>Make Admin</button>
+              <button onClick={() => removeMember(member)} className={classes.removeButton}>Remove Member</button>
+              {member !== teamAdmin && <button onClick={() => makeAdmin(member)} className={classes.makeAdminButton}>Make Admin</button>} 
             </div>
           </li>
         ))}

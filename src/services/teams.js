@@ -119,3 +119,101 @@ export const createNewTeam = async (teamdata) => {
         };
     }
 }
+
+export const getStatsById = async (id) => {
+    try {
+        const response = await fetch(`https://scwmimxeql.execute-api.us-east-1.amazonaws.com/dev/team-stats/${id}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        const data = await response.json();
+        console.log(data);
+        return {
+            teamstat: data.team_statistics
+        };
+    } catch (error) {
+        console.log(error);
+        return {
+            teamstat: null
+        };
+    }
+}
+
+export const getMembersById = async (id) => {
+    try {
+        const response = await fetch(`https://scwmimxeql.execute-api.us-east-1.amazonaws.com/dev/get-all-members/${id}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        const data = await response.json();
+        console.log(data);
+        return {
+            members: data.team_members,
+            admin: data.team_admin
+        };
+    } catch (error) {
+        console.log(error);
+        return {
+            members: null
+        };
+    }
+}
+
+
+export const removeTeamMember = async (tdata) => {
+    try {
+        const response = await fetch('https://scwmimxeql.execute-api.us-east-1.amazonaws.com/dev/manage-team/remove-member', {
+            method: 'Post',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                team_id: tdata.team_id,
+                user_id: tdata.user_name,
+                member_id: tdata.member
+            })
+        });
+        const data = await response.json();
+        console.log(data);
+        return {
+            response: data.body.message
+        };
+    } catch (error) {
+        console.log(error);
+        return {
+            response: { message: "Error connecting to server"}
+        };
+    }
+}
+
+export const promotionAdmin = async (tdata) => {
+    try {
+        const response = await fetch('https://scwmimxeql.execute-api.us-east-1.amazonaws.com/dev/manage-team/promote-to-admin', {
+            method: 'Post',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                team_id: tdata.team_id,
+                user_id: tdata.user_name,
+                member_id: tdata.member
+            })
+        });
+        const data = await response.json();
+        console.log(data);
+        return {
+            response: data.body.message
+        };
+    } catch (error) {
+        console.log(error);
+        return {
+            response: { message: "Error connecting to server"}
+        };
+    }
+}
