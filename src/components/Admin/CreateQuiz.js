@@ -151,7 +151,7 @@ const CreateQuizPage = () => {
         <Grid item xs={12}>
           <TextField
             fullWidth
-            label="Quiz Expiry"
+            label="Quiz Start Time"
             name="quizExpiry"
             type="datetime-local"
             value={quizData.quizExpiry}

@@ -24,7 +24,7 @@ const EditQuiz = () => {
     quizNumber: "",
     quizCategory: "",
     quizLevel: "",
-    quizExpiry: "",
+    quizStartTime: "",
     timeLimit: "",
     quizName: "",
     quizDescription: "",
@@ -44,7 +44,7 @@ const EditQuiz = () => {
   const handleChange = (event) => {
     const { name, value } = event.target;
 
-    if (name === "quizExpiry") {
+    if (name === "quizStartTime") {
       // Format the date string as required (remove "T" and seconds)
       const formattedDate = value.replace("T", " ").substring(0, 16);
       setQuizData((prevData) => ({
@@ -384,10 +384,10 @@ const EditQuiz = () => {
             <Grid item xs={12}>
               <TextField
                 fullWidth
-                label="Quiz Expiry"
+                label="Quiz Start Time"
                 name="quizExpiry"
                 type="datetime-local"
-                value={quizData.quizExpiry}
+                value={quizData.quizStartTime}
                 onChange={handleChange}
                 InputLabelProps={{
                   shrink: true,
