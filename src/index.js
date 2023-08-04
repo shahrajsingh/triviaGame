@@ -19,9 +19,8 @@ import CreateQuiz from "./components/Admin/CreateQuiz";
 import EditQuiz from "./components/Admin/EditQuiz";
 import Lobby from "./components/lobby/Lobby";
 import Leaderboard from "./pages/leaderboards/leaderboards";
-import Lex from "./components/Lex/Lex";
-import ChatBox from "./components/in-game/ChatBox";
 import TeamView from "./pages/teamView/TeamView";
+import BufferPage from "./components/lobby/BufferPage";
 
 const router = createBrowserRouter([
   {
@@ -31,27 +30,24 @@ const router = createBrowserRouter([
         <App></App>
       </AuthProvider>
     ),
-    children: [
+    children:[
       {
         path: "/create_team",
         element: <CreateTeam></CreateTeam>,
       },
       {
-        path: "/teamstats/:id",
+        path: "/teamstats/id",
         element: <TeamStats></TeamStats>,
       },
       {
-        path: "/manageteam/:id",
+        path: "/manageteam/id",
         element: <ManageTeam></ManageTeam>,
       },
       {
         path: "/profile",
         element: <ProfileHome />,
       },
-      {
-        path: "/startquiz",
-        element: <Quiz />,
-      },
+
       {
         path: "/admin/home",
         element: <QuizHome />,
@@ -72,17 +68,14 @@ const router = createBrowserRouter([
         path: "/leaderboard",
         element: <Leaderboard></Leaderboard>,
       },
-      {
-        path: "/create2fa",
-        element: (
-          <AuthProvider>
-            <Signup2fa></Signup2fa>
-          </AuthProvider>
-        ),
-      },
+      
       {
         path: "/teamview",
         element: <TeamView></TeamView>,
+      },
+      {
+        path: "/buffer",
+        element: <BufferPage />,
       },
     ],
   },
@@ -117,6 +110,10 @@ const router = createBrowserRouter([
         <Signup2fa></Signup2fa>
       </AuthProvider>
     ),
+  },
+  {
+    path: "/startquiz",
+    element: <Quiz />,
   },
 ]);
 
