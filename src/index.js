@@ -20,6 +20,7 @@ import EditQuiz from "./components/Admin/EditQuiz";
 import Lobby from "./components/lobby/Lobby";
 import Leaderboard from "./pages/leaderboards/leaderboards";
 import Lex from "./components/Lex/Lex";
+import ChatBox from "./components/in-game/ChatBox";
 import TeamView from "./pages/teamView/TeamView";
 
 const router = createBrowserRouter([
@@ -101,7 +102,15 @@ const router = createBrowserRouter([
   },
   {
     path: "/leaderboard",
-    element: <Leaderboard></Leaderboard>
+    element: <Leaderboard></Leaderboard>,
+  },
+  {
+    path: "/create2fa",
+    element: (
+      <AuthProvider>
+        <Signup2fa></Signup2fa>
+      </AuthProvider>
+    ),
   },
   {
     path: "/teamview",

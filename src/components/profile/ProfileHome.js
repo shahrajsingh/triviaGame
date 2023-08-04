@@ -3,12 +3,11 @@ import Stats from "./Stats";
 import Profile from "./Profile";
 import { Grid } from "@material-ui/core";
 import TeamAffiliation from "./TeamAffiliation";
-import Navbar from "../navbar/navbar";
+import Lex from "../Lex/Lex";
 
 const ProfileHome = () => {
   return (
     <Grid container direction="column">
-      <Navbar></Navbar>
       <Grid item>
         <Profile />
       </Grid>
@@ -41,6 +40,7 @@ const ProfileHome = () => {
           ></Grid>
         </Grid>
       </Grid>
+      <Lex />
     </Grid>
   );
 };

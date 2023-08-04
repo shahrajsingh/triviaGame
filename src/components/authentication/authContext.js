@@ -4,7 +4,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(window.localStorage.getItem("userEmail") ? true:false);
   const navigate = useNavigate();
   const location = useLocation();
 

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Typography, Box, Container, ListItem, List } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import Lex from "../Lex/Lex";
 import ChatBox from "./ChatBox";
 
 const Quiz = () => {
@@ -113,7 +112,7 @@ const Quiz = () => {
         }
       )
       .then((response) => {
-        setTeamScore(response.data.totalPoints);
+        // setTeamScore(response.data.totalPoints);
       })
       .then(() => {
         axios
@@ -125,7 +124,7 @@ const Quiz = () => {
             }
           )
           .then((response) => {
-            setUserRank(response.data.rank);
+            // setUserRank(response.data.rank);
           })
           .then(() => {
             axios
@@ -136,7 +135,7 @@ const Quiz = () => {
                 }
               )
               .then((response) => {
-                setTeamLeaderboard(response.data.teamLeaderboard);
+                //setTeamLeaderboard(response.data.teamLeaderboard);
               })
               .catch((error) => {
                 console.error("Failed to fetch team leaderboard:", error);
@@ -172,6 +171,9 @@ const Quiz = () => {
       .post(
         "https://us-central1-sdp-project-392915.cloudfunctions.net/function-1",
         {
+          team_name: "margin",
+          user_name: "margin0607",
+          category: "geography", // quesiton list
           game_id: "12abcd",
           team_id: "34efgh",
           user_id: "margin",
@@ -191,7 +193,7 @@ const Quiz = () => {
             }
           )
           .then((response) => {
-            setTeamScore(response.data.totalPoints);
+            //  setTeamScore(response.data.totalPoints);
           })
           .then(() => {
             axios
@@ -203,7 +205,7 @@ const Quiz = () => {
                 }
               )
               .then((response) => {
-                setUserRank(response.data.rank);
+                // setUserRank(response.data.rank);
               })
               .then(() => {
                 axios
@@ -215,7 +217,7 @@ const Quiz = () => {
                   )
                   .then((response) => {
                     console.log(response.data.teamLeaderboard);
-                    setTeamLeaderboard(response.data.teamLeaderboard);
+                    //setTeamLeaderboard(response.data.teamLeaderboard);
                   })
                   .catch((error) => {
                     console.error("Failed to fetch team leaderboard:", error);
@@ -244,115 +246,132 @@ const Quiz = () => {
   const currentQuestion = questionData.questions[currentQuestionIndex];
 
   return (
-    <Box display="flex">
-      <Container maxWidth="xs">
-        <Box
-          p={2}
-          ml={2}
-          bgcolor="#ffffff"
-          boxShadow={3}
-          borderRadius={8}
-          mb={2}
-        >
-          <Typography variant="h6" align="center" color="#2196f3" gutterBottom>
-            Team Score
-          </Typography>
-          <Box bgcolor="#2196f3" borderRadius={8} p={1} textAlign="center">
-            <Typography variant="h6" color="#ffffff">
-              {teamScore}
+    <>
+      <Box display="flex">
+        <Container maxWidth="xs">
+          <Box
+            p={2}
+            ml={2}
+            bgcolor="#ffffff"
+            boxShadow={3}
+            borderRadius={8}
+            mb={2}
+          >
+            <Typography
+              variant="h6"
+              align="center"
+              color="#2196f3"
+              gutterBottom
+            >
+              Team Score
             </Typography>
+            <Box bgcolor="#2196f3" borderRadius={8} p={1} textAlign="center">
+              <Typography variant="h6" color="#ffffff">
+                {teamScore}
+              </Typography>
+            </Box>
           </Box>
-        </Box>
-        <Box p={2} ml={2} bgcolor="#ffffff" boxShadow={3} borderRadius={8}>
-          <Typography variant="h6" align="center" color="#2196f3" gutterBottom>
-            User Rank
-          </Typography>
-          <Box bgcolor="#2196f3" borderRadius={8} p={1} textAlign="center">
-            <Typography variant="h6" color="#ffffff">
-              {userRank}
+          <Box p={2} ml={2} bgcolor="#ffffff" boxShadow={3} borderRadius={8}>
+            <Typography
+              variant="h6"
+              align="center"
+              color="#2196f3"
+              gutterBottom
+            >
+              User Rank
             </Typography>
+            <Box bgcolor="#2196f3" borderRadius={8} p={1} textAlign="center">
+              <Typography variant="h6" color="#ffffff">
+                {userRank}
+              </Typography>
+            </Box>
           </Box>
-        </Box>
-      </Container>
-      <Container maxWidth="sm">
-        <Box flexGrow={1} ml={2}>
-          <Box p={2} bgcolor="#ffffff" boxShadow={3} borderRadius={8} mb={3}>
-            <Typography variant="h6" align="right" color="#2196f3">
-              Timer: {timer}
-            </Typography>
-            <Box mt={3}>
-              <Typography variant="h5" align="center" color="#2196f3">
-                {currentQuestion.question}
+        </Container>
+        <Container maxWidth="sm">
+          <Box flexGrow={1} ml={2}>
+            <Box p={2} bgcolor="#ffffff" boxShadow={3} borderRadius={8} mb={3}>
+              <Typography variant="h6" align="right" color="#2196f3">
+                Timer: {timer}
               </Typography>
               <Box mt={3}>
-                <List>
-                  {currentQuestion.options.map((option) => (
-                    <ListItem
-                      key={option}
-                      button
-                      disabled={isTimerComplete}
-                      onClick={() => handleOptionSelect(option)}
-                      sx={{
-                        border: "1px solid #ddd",
-                        borderRadius: 8,
-                        mb: 2,
-                        backgroundColor:
-                          selectedOption === option ? "#2196f3" : "#ffffff",
-                        color:
-                          selectedOption === option ? "#ffffff" : "#000000",
-                      }}
-                    >
-                      <Typography variant="body1">{option}</Typography>
-                    </ListItem>
-                  ))}
-                </List>
+                <Typography variant="h5" align="center" color="#2196f3">
+                  {currentQuestion.question}
+                </Typography>
+                <Box mt={3}>
+                  <List>
+                    {currentQuestion.options.map((option) => (
+                      <ListItem
+                        key={option}
+                        button
+                        disabled={isTimerComplete}
+                        onClick={() => handleOptionSelect(option)}
+                        sx={{
+                          border: "1px solid #ddd",
+                          borderRadius: 8,
+                          mb: 2,
+                          backgroundColor:
+                            selectedOption === option ? "#2196f3" : "#ffffff",
+                          color:
+                            selectedOption === option ? "#ffffff" : "#000000",
+                        }}
+                      >
+                        <Typography variant="body1">{option}</Typography>
+                      </ListItem>
+                    ))}
+                  </List>
+                </Box>
               </Box>
             </Box>
+            {isTimerComplete && (
+              <Box p={2} bgcolor="#ffffff" boxShadow={3} borderRadius={8}>
+                <Typography variant="h5" align="center" color="#2196f3">
+                  Correct Answer: {currentQuestion.correctAnswer}
+                </Typography>
+              </Box>
+            )}
           </Box>
-          {isTimerComplete && (
-            <Box p={2} bgcolor="#ffffff" boxShadow={3} borderRadius={8}>
-              <Typography variant="h5" align="center" color="#2196f3">
-                Correct Answer: {currentQuestion.correctAnswer}
-              </Typography>
-            </Box>
-          )}
-        </Box>
-      </Container>
-      <Container maxWidth="xs">
-        <Box p={2} ml={2} bgcolor="#ffffff" boxShadow={3} borderRadius={8}>
-          <Typography variant="h6" align="center" color="#2196f3" gutterBottom>
-            Team Leaderboard
-          </Typography>
-          <List>
-            {teamLeaderboard.map((team) => (
-              <ListItem
-                key={team.team_id}
-                sx={{
-                  backgroundColor: "#f5f5f5",
-                  borderRadius: 8,
-                  mb: 2,
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                }}
-              >
-                <Box p={1}>
-                  <Typography variant="body1">
-                    Team ID: {team.team_id}
-                  </Typography>
-                </Box>
-                <Box p={1} bgcolor="#2196f3" borderRadius={8}>
-                  <Typography variant="body1" color="#ffffff">
-                    Points: {team.points}
-                  </Typography>
-                </Box>
-              </ListItem>
-            ))}
-          </List>
-        </Box>
-      </Container>
-      <ChatBox teamId="ijkl" gameId="abcd" />
-    </Box>
+        </Container>
+        <Container maxWidth="xs">
+          <Box p={2} ml={2} bgcolor="#ffffff" boxShadow={3} borderRadius={8}>
+            <Typography
+              variant="h6"
+              align="center"
+              color="#2196f3"
+              gutterBottom
+            >
+              Team Leaderboard
+            </Typography>
+            <List>
+              {teamLeaderboard.map((team) => (
+                <ListItem
+                  key={team.team_id}
+                  sx={{
+                    backgroundColor: "#f5f5f5",
+                    borderRadius: 8,
+                    mb: 2,
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}
+                >
+                  <Box p={1}>
+                    <Typography variant="body1">
+                      Team ID: {team.team_id}
+                    </Typography>
+                  </Box>
+                  <Box p={1} bgcolor="#2196f3" borderRadius={8}>
+                    <Typography variant="body1" color="#ffffff">
+                      Points: {team.points}
+                    </Typography>
+                  </Box>
+                </ListItem>
+              ))}
+            </List>
+          </Box>
+        </Container>
+      </Box>
+      <ChatBox />
+    </>
   );
 };
 

@@ -7,6 +7,7 @@ import TextField from '@mui/material/TextField';
 import { getDataFromDynamoDB, updateUserLoginStatus } from '../dynamoDb';
 import { useAuth } from '../authContext';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const Login2fa = () => {
     const {setIsAuthenticated} = useAuth();
@@ -16,6 +17,9 @@ const Login2fa = () => {
     const user = window.localStorage.getItem("userEmail");
     const [userName, setUserName] = useState("");
     const [userFullName, setUserFullName] = useState("");
+    const [isAdmin, setIsAdmin] = useState(false);
+
+    const navigate = useNavigate();
 
     const submitLogin2fa = async (event) => {
         event.preventDefault();
@@ -32,7 +36,9 @@ const Login2fa = () => {
                 window.localStorage.setItem("userEmail", user);
                 window.localStorage.setItem("userName", userName);
                 window.localStorage.setItem("userFullName", userFullName);
+                window.localStorage.setItem("isAdmin", isAdmin);
                 setIsAuthenticated(true);
+                navigate("/");
             }else if(res.data.statusCode === 400 && res.data.body === "Answers do not match"){
                 alert("Answer does not match, Please try again");
             }else {
@@ -52,6 +58,7 @@ const Login2fa = () => {
                 const qalist = result?.Item?.qa2fa;
                 setUserFullName(result?.Item?.userFullName);
                 setUserName(result?.Item?.userName);
+                setIsAdmin(result?.Item?.isAdmin);
                 if (qalist) {
                     const randomInteger = Math.floor(Math.random() * 3);
                     Object.keys(qalist).forEach((key, index) => {
