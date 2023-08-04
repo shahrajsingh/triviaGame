@@ -1,7 +1,8 @@
 .container {
     margin: auto;
-    width: 50%;
-    padding: 10px;
+    width: 80%;
+    height: calc(100vh - 88px);
+    padding: 1rem 0rem 0.5rem 0rem;
   }
   
   .header {
@@ -21,10 +22,16 @@
     margin-bottom: 10px;
   }
   
-  .select {
-    width: 100%;
-    height: 40px;
+  .select-time-range {
+    width: 164px;
+    height: 38px;
     font-size: 16px;
-    margin-bottom: 20px;
   }
-  
+
+  .leaderboard-toolbar{
+    background-color: white; color: black; display: flex !important;
+  }
+  .leaderboard-toolbar-header{
+    flex-grow: 1 !important;
+    text-align: left;
+  }
