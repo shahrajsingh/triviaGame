@@ -57,14 +57,12 @@ const Signup2fa = () => {
         event.preventDefault();
         const fullName = firstName + " " + lastName;
         setUserFullName(fullName);
-        
         window.localStorage.setItem("userName", userName);
         window.localStorage.setItem("userFullName", fullName);
 
         await storeDataInDynamoDB(userEmail,userName,fullName, {}).then((result) => {
             if (result === "Success") {
                 setAdditionalUserDetails(true);
-                navigate("/login");
             } else {
                 alert(result);
             }
