@@ -29,6 +29,52 @@ const router = createBrowserRouter([
         <App></App>
       </AuthProvider>
     ),
+    children:[
+      {
+        path: "/create_team",
+        element: <CreateTeam></CreateTeam>,
+      },
+      {
+        path: "/teamstats/id",
+        element: <TeamStats></TeamStats>,
+      },
+      {
+        path: "/manageteam/id",
+        element: <ManageTeam></ManageTeam>,
+      },
+      {
+        path: "/profile",
+        element: <ProfileHome />,
+      },
+      {
+        path: "/startquiz",
+        element: <Quiz />,
+      },
+      {
+        path: "/admin/home",
+        element: <QuizHome />,
+      },
+      {
+        path: "/admin/createquiz",
+        element: <CreateQuiz />,
+      },
+      {
+        path: "/admin/editquiz/:encodedQuizData",
+        element: <EditQuiz />,
+      },
+      {
+        path: "/lobby",
+        element: <Lobby />,
+      },
+      {
+        path: "/leaderboard",
+        element: <Leaderboard></Leaderboard>,
+      },
+      {
+        path: "/chat",
+        element: <Lex />,
+      },
+    ]
   },
   {
     path: "/login",
@@ -62,50 +108,7 @@ const router = createBrowserRouter([
       </AuthProvider>
     ),
   },
-  {
-    path: "/create_team",
-    element: <CreateTeam></CreateTeam>,
-  },
-  {
-    path: "/teamstats/id",
-    element: <TeamStats></TeamStats>,
-  },
-  {
-    path: "/manageteam/id",
-    element: <ManageTeam></ManageTeam>,
-  },
-  {
-    path: "/profile",
-    element: <ProfileHome />,
-  },
-  {
-    path: "/startquiz",
-    element: <Quiz />,
-  },
-  {
-    path: "/admin/home",
-    element: <QuizHome />,
-  },
-  {
-    path: "/admin/createquiz",
-    element: <CreateQuiz />,
-  },
-  {
-    path: "/admin/editquiz/:encodedQuizData",
-    element: <EditQuiz />,
-  },
-  {
-    path: "/lobby",
-    element: <Lobby />,
-  },
-  {
-    path: "/leaderboard",
-    element: <Leaderboard></Leaderboard>,
-  },
-  {
-    path: "/chat",
-    element: <Lex />,
-  },
+ 
 ]);
 
 const root = ReactDOM.createRoot(document.getElementById("root"));

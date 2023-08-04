@@ -11,7 +11,7 @@ export const updateUserLoginStatus = async (userEmail, isLoggedIn) => {
       }
     )
     .then((res) => {
-      console.info(res.body);
+      // got the response
     })
     .catch((error) => {
       console.error(error);
