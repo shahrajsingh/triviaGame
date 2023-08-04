@@ -1,37 +1,58 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+import React, { useState , useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import classes from './CreateTeam.module.css';
+import { generateTeamName, searchPlayers, sendInvite, createNewTeam} from '../../services/teams';
 
 const CreateTeamForm = () => {
   const [teamName, setTeamName] = useState('');
   const [teamAdmin, setTeamAdmin] = useState('');
   const [members, setMembers] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
-  const [searchResults, setSearchResults] = useState([]);
-  const [inviteSent, setInviteSent] = useState(false);
+  const navigate = useNavigate();
 
-  const generateTeamName = async () => {
-    try {
-      const response = await axios.get('http://127.0.0.1:5000/get_team_name');
-      console.log(response.data)
-      setTeamName(response.data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
+  const [allSearchResults, setAllSearchResults] = useState([]);
+  
   const searchMembers = async () => {
     try {
-      const response = await axios.get(`/search-members?name=${searchQuery}`);
-      setSearchResults(response.data.results);
+      console.log(searchQuery);
+      const response = await searchPlayers(searchQuery);
+      setAllSearchResults((prevResults) => [...prevResults, response.user]);
     } catch (error) {
       console.error(error);
     }
   };
 
-  const sendInvite = async (email) => {
+  const generateteamName = async () => {
     try {
-      await axios.post('/api/send-invite', { email });
+      const response = await generateTeamName();
+      setTeamName(response.teamName);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    const fetchAdmin = async () => {
+      const user_name = window.localStorage.getItem('userName');
+      setTeamAdmin(user_name);
+    }
+    fetchAdmin();
+}, []);
+
+  const sendInvites = async (data, index) => {
+    try {
+      data.teamname = teamName;
+      const response = await sendInvite(data);
+      console.log(response)
+      if(response.success){
+        let newSearchResults = [...allSearchResults];
+        newSearchResults[index].invited = true;
+        setAllSearchResults(newSearchResults);
+      }else{
+        let newSearchResults = [...allSearchResults];
+        newSearchResults[index].invited = false;
+        setAllSearchResults(newSearchResults);
+      }  
     } catch (error) {
       console.error(error);
     }
@@ -39,6 +60,7 @@ const CreateTeamForm = () => {
 
   const createTeam = async (e) => {
     e.preventDefault();
+    setMembers([ ]);
     const formData = {
       teamName,
       teamAdmin,
@@ -46,8 +68,15 @@ const CreateTeamForm = () => {
     };
 
     try {
-      await axios.post('/api/create-team', formData);
-      // Handle success or show a confirmation message
+      const resp = await createNewTeam(formData);
+      console.log(resp.response.success);
+      if(resp.response.success){
+      window.localStorage.setItem('teamId', resp.response.team_id);
+      window.localStorage.setItem('teamName', resp.response.team_name);
+      navigate("/lobby");
+      }else{
+        console.log(resp.response.error);
+      }
     } catch (error) {
       console.error(error);
     }
@@ -65,7 +94,7 @@ const CreateTeamForm = () => {
           onChange={(e) => setTeamName(e.target.value)}
           className={classes.input}
         />
-        <button type="button" onClick={generateTeamName} className={classes.button}>Generate Name</button>
+        <button type="button" onClick={generateteamName} className={classes.button}>Generate Name</button>
       </div>
       <div className={classes.inlineRow}>
         <label htmlFor="teamAdmin" className={classes.label}>Team Admin:</label>
@@ -90,31 +119,21 @@ const CreateTeamForm = () => {
         <button type="button" onClick={searchMembers} className={classes.button}>Search</button>
       </div>
       <div className={classes.membersContainer}>
-        <ul>
-          {searchResults.map((member) => (
-            <li key={member.id}>
-              {member.name}
-              <button type="button" onClick={() => sendInvite(member.email)} className={classes.button}>Send Invite</button>
+        <ol>
+          {allSearchResults.map((member, index) => (
+            <li key={member.userName}>
+              {member.userName} ({member.userEmail})
+              <button 
+                type="button" 
+                onClick={() => sendInvites(member, index)} 
+                className={classes.button}
+                style={member.invited ? { backgroundColor: 'green' } : { backgroundColor: 'blue' }}
+              >
+                {member.invited ? 'Invited' : 'Send Invite'}
+              </button>
             </li>
           ))}
-        </ul>
-      </div>
-      <div>
-        <button type="button" onClick={() => setMembers([...members, ''])} className={classes.button}>Add Member</button>
-        {members.map((member, index) => (
-          <div key={index}>
-            <input
-              type="text"
-              value={member}
-              onChange={(e) => {
-                const updatedMembers = [...members];
-                updatedMembers[index] = e.target.value;
-                setMembers(updatedMembers);
-              }}
-              className={classes.memberInput}
-            />
-          </div>
-        ))}
+        </ol>
       </div>
       <button type="submit" className={`${classes.button} ${classes.submitButton}`}>Create</button>
     </form>
