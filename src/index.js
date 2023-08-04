@@ -37,11 +37,11 @@ const router = createBrowserRouter([
         element: <CreateTeam></CreateTeam>,
       },
       {
-        path: "/teamstats/id",
+        path: "/teamstats/:id",
         element: <TeamStats></TeamStats>,
       },
       {
-        path: "/manageteam/id",
+        path: "/manageteam/:id",
         element: <ManageTeam></ManageTeam>,
       },
       {
