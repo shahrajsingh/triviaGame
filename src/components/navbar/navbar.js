@@ -13,9 +13,9 @@ import { useAuth } from "../authentication/authContext";
 import { updateUserLoginStatus } from "../authentication/dynamoDb";
 import { auth } from "../authentication/firebase";
 import { signOut } from "firebase/auth";
-import { Create, Group } from "@mui/icons-material";
+import { Group } from "@mui/icons-material";
 import QuizIcon from "@mui/icons-material/Quiz";
-
+import AnalyticsIcon from "@mui/icons-material/Analytics";
 const onLogout = async () => {
   await signOut(auth)
     .then((res) => {
@@ -47,52 +47,71 @@ const Navbar = () => {
             Trivia Titans
           </Typography>
           {isAdmin && (
-            <a
-              href="/admin/home"
-              style={{ color: "inherit", textDecoration: "none" }}
-            >
-              <Button
-                color="inherit"
-                aria-label="All Quiz"
-                startIcon={<QuizIcon />}
+            <div>
+              <a
+                href="/admin/home"
+                style={{ color: "inherit", textDecoration: "none" }}
               >
-                Quizzes
-              </Button>
-            </a>
+                <Button
+                  color="inherit"
+                  aria-label="All Quiz"
+                  startIcon={<QuizIcon />}
+                >
+                  Quizzes
+                </Button>
+              </a>
+              <a
+                href="/admin/home"
+                style={{ color: "inherit", textDecoration: "none" }}
+              >
+                <Button
+                  color="inherit"
+                  aria-label="Analytics"
+                  startIcon={<AnalyticsIcon />}
+                >
+                  Analytics
+                </Button>
+              </a>
+            </div>
           )}
-          <a
-            href="/create_team"
-            style={{ color: "inherit", textDecoration: "none" }}
-          >
-            <Button
-              color="inherit"
-              aria-label="leaderboard"
-              startIcon={<Group />}
-            >
-              Teams
-            </Button>
-          </a>
-          <a
-            href="/leaderboard"
-            style={{ color: "inherit", textDecoration: "none" }}
-          >
-            <Button
-              color="inherit"
-              aria-label="leaderboard"
-              startIcon={<LeaderboardIcon />}
-            >
-              Leaderboard
-            </Button>
-          </a>
-          <a href="/profile" style={{ color: "inherit" }}>
-            <Button
-              color="inherit"
-              aria-label="profile"
-              startIcon={<AccountCircle />}
-            >
-              Profile
-            </Button>
-          </a>
+          {!isAdmin && (
+            <div>
+              <a
+                href="/create_team"
+                style={{ color: "inherit", textDecoration: "none" }}
+              >
+                <Button
+                  color="inherit"
+                  aria-label="leaderboard"
+                  startIcon={<Group />}
+                >
+                  Teams
+                </Button>
+              </a>
+              <a
+                href="/leaderboard"
+                style={{ color: "inherit", textDecoration: "none" }}
+              >
+                <Button
+                  color="inherit"
+                  aria-label="leaderboard"
+                  startIcon={<LeaderboardIcon />}
+                >
+                  Leaderboard
+                </Button>
+              </a>
+              <a href="/profile" style={{ color: "inherit" }}>
+                <Button
+                  color="inherit"
+                  aria-label="profile"
+                  startIcon={<AccountCircle />}
+                >
+                  Profile
+                </Button>
+              </a>
+            </div>
+          )}
+
           <Button
             color="error"
             variant="contained"
