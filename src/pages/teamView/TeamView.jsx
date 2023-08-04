@@ -11,12 +11,18 @@ function TeamPage() {
         navigate("/create_team");
     };
 
+    const joinTeam = (team) => {
+        window.localStorage.setItem('teamId', team.id);
+        window.localStorage.setItem('teamName', team.name);
+        navigate("/lobby");
+    };
+
     useEffect(() => {
         const fetchTeams = async () => {
           const user_name = window.localStorage.getItem('userName');
           const AllTeams = await getAllTeams(user_name);
           if (AllTeams) {
-            setTeams(AllTeams);
+            setTeams(AllTeams.teams);
         } else {
             setTeams([]);
         }
@@ -29,25 +35,28 @@ function TeamPage() {
             <table className={classes.teamtable}>
                 <thead>
                     <tr>
-                        <th>Index</th>
+                        <th>Sr.No</th>
                         <th>Team Name</th>
                         <th>Join Team</th>
                     </tr>
                 </thead>
+                {teams && teams.length > 0 ? (
                 <tbody>
                     {teams.map((team, index) => (
-                        <tr key={team.team_id}>
+                        <tr key={team.id}>
                             <td>{index + 1}</td>
-                            <td>{team.team_name}</td>
+                            <td>{team.name}</td>
                             <td>
-                                <button className={classes.joinbtn}>Join</button>
+                                <button className={classes.joinbtn} onClick={() => joinTeam(team)}>Join</button>
                             </td>
                         </tr>
                     ))}
-                </tbody>
-            </table>
+                </tbody> ) : (
+                                <tr><td></td><td colSpan="3" className={classes.Msg}>No Teams Found</td></tr>
+                            )}
+            </table> 
             <div className={classes.separator}>--OR--</div>
-            <button className={classes.createteambtn}>Create New Team</button>
+            <button className={classes.createteambtn} onClick={goToCreateTeam}>Create New Team</button>
         </div>
     );
 }

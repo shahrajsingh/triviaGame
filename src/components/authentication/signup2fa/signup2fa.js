@@ -42,6 +42,7 @@ const Signup2fa = () => {
         if (additionalUserDetails) {
             await storeDataInDynamoDB(userEmail,userName,userFullName, qa2fa).then((result) => {
                 if (result === "Success") {
+                    alert("user creation successfull, please Login");
                     navigate("/login");
                 } else {
                     alert(result);
@@ -63,7 +64,7 @@ const Signup2fa = () => {
         await storeDataInDynamoDB(userEmail,userName,fullName, {}).then((result) => {
             if (result === "Success") {
                 setAdditionalUserDetails(true);
-                //navigate("/login");
+                navigate("/login");
             } else {
                 alert(result);
             }
@@ -74,10 +75,6 @@ const Signup2fa = () => {
         width: "100%",
         margin: "0.5rem auto"
     };
-
-    useEffect(() => {
-
-    });
 
     return (<>
         <Card sx={{ display: "flex", flexFlow: "column", justifyContent: "center", alignItems: "center", margin: "2rem auto", width: "400px", height: "350px", padding: "1rem" }}>

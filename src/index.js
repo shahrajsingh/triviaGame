@@ -19,6 +19,7 @@ import CreateQuiz from "./components/Admin/CreateQuiz";
 import EditQuiz from "./components/Admin/EditQuiz";
 import Lobby from "./components/lobby/Lobby";
 import Leaderboard from "./pages/leaderboards/leaderboards";
+import Lex from "./components/Lex/Lex";
 import TeamView from "./pages/teamView/TeamView";
 
 const router = createBrowserRouter([
@@ -104,7 +105,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/teamview",
-    element: <TeamView></TeamView>
+    element: <TeamView></TeamView> 
   }
 ]);
 

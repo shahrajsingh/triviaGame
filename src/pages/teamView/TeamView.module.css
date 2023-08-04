@@ -2,40 +2,76 @@
     font-family: Arial, sans-serif;
     padding: 20px;
     background-color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;  
 }
 
-.team-table {
-    width: 100%;
+.teamtable {
     border-collapse: collapse;
-    margin-bottom: 20px;
+    width: 80%; 
+    margin-top: 20px;
+    border: 1px solid #FFC0CB;
+    margin-bottom: 20px; 
 }
 
-.team-table th,
-.team-table td {
-    border: 1px solid gray;
-    padding: 10px 15px;
+.teamtable th, .teamtable td {
+    border: 1px solid #FFC0CB;
+    padding: 8px 12px;
+    text-align: left;
+}
+
+.teamtable th {
+    background-color: #ef5777;
+    font-weight: bolder;
+    font-size: 22px;
+}
+
+.Msg {
+    font-size: 20px;
+    align-items: center;
+}
+
+.teamtable tr:hover {
+    background-color: #FFEBE8; 
 }
 
 .joinbtn {
-    background-color: pink;
+    background-color: #ef5777;
     border: none;
+    color: white;
     padding: 5px 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    margin: 4px 2px;
     cursor: pointer;
-    border-radius: 3px;
+    border-radius: 5px;
 }
 
-.createteambtn {
-    display: block;
-    width: 100%;
-    background-color: gray;
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    cursor: pointer;
-    border-radius: 3px;
+.joinbtn:hover {
+    background-color: #FFA8B3; 
 }
 
 .separator {
+    font-size: 24px; 
+    margin-bottom: 20px;  
+}
+
+.createteambtn {
+    background-color: #ef5777;
+    border: none;
+    color: white;
+    padding: 8px 15px;
     text-align: center;
-    margin: 20px 0;
+    text-decoration: none;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.2s; 
+}
+
+.createteambtn:hover {
+    background-color: #FFA8B3; 
 }
