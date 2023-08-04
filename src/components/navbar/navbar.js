@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "./navbar.css";
 
 import AppBar from "@mui/material/AppBar";
@@ -13,9 +13,11 @@ import { useAuth } from "../authentication/authContext";
 import { updateUserLoginStatus } from "../authentication/dynamoDb";
 import { auth } from "../authentication/firebase";
 import { signOut } from "firebase/auth";
-import { Group } from "@mui/icons-material";
+import { BarChart, Group, GroupAdd, Settings } from "@mui/icons-material";
 import QuizIcon from "@mui/icons-material/Quiz";
 import AnalyticsIcon from "@mui/icons-material/Analytics";
+import { Menu, MenuItem } from "@mui/material";
+
 const onLogout = async () => {
   await signOut(auth)
     .then((res) => {
@@ -30,6 +32,17 @@ const onLogout = async () => {
 
 const Navbar = () => {
   const isAdmin = localStorage.getItem("isAdmin") === "true";
+  const teamId = localStorage.getItem("teamId");
+  const [teamMenuAnchorEl, setTeamMenuAnchorEl] = useState(null);
+  const teamMenuOpen = Boolean(teamMenuAnchorEl);
+
+  const handleTeamMenuOpen = (event) => {
+    setTeamMenuAnchorEl(event.currentTarget);
+  };
+
+  const handleTeamMenuClose = () => {
+    setTeamMenuAnchorEl(null);
+  };
   const { setIsAuthenticated } = useAuth();
   return (
     <div>
@@ -76,18 +89,64 @@ const Navbar = () => {
           )}
           {!isAdmin && (
             <div>
-              <a
-                href="/create_team"
-                style={{ color: "inherit", textDecoration: "none" }}
+              {/* Team Button with Dropdown Menu */}
+              <Button
+                color="inherit"
+                aria-controls="team-menu"
+                aria-haspopup="true"
+                startIcon={<Group />}
+                onClick={handleTeamMenuOpen}
               >
-                <Button
-                  color="inherit"
-                  aria-label="leaderboard"
-                  startIcon={<Group />}
-                >
-                  Teams
-                </Button>
-              </a>
+                Teams
+              </Button>
+              <Menu
+                id="team-menu"
+                anchorEl={teamMenuAnchorEl}
+                keepMounted
+                open={teamMenuOpen}
+                onClose={handleTeamMenuClose}
+              >
+                <MenuItem onClick={handleTeamMenuClose}>
+                  <a
+                    href="/teamview"
+                    style={{ color: "inherit", textDecoration: "none" }}
+                  >
+                    <Group sx={{ marginRight: "8px" }} />
+                    View Team
+                  </a>
+                </MenuItem>
+                <MenuItem onClick={handleTeamMenuClose}>
+                  <a
+                    href="/create_team"
+                    style={{ color: "inherit", textDecoration: "none" }}
+                  >
+                    <GroupAdd sx={{ marginRight: "8px" }} />
+                    Create Team
+                  </a>
+                </MenuItem>
+                {teamId && (
+                  <div>
+                    <MenuItem onClick={handleTeamMenuClose}>
+                      <a
+                        href={`/manageteam/${teamId}`}
+                        style={{ color: "inherit", textDecoration: "none" }}
+                      >
+                        <Settings sx={{ marginRight: "8px" }} />
+                        Manage Team
+                      </a>
+                    </MenuItem>
+                    <MenuItem onClick={handleTeamMenuClose}>
+                      <a
+                        href={`/teamstats/${teamId}`}
+                        style={{ color: "inherit", textDecoration: "none" }}
+                      >
+                        <BarChart sx={{ marginRight: "8px" }} />
+                        Team Stats
+                      </a>
+                    </MenuItem>
+                  </div>
+                )}
+              </Menu>
               <a
                 href="/leaderboard"
                 style={{ color: "inherit", textDecoration: "none" }}
@@ -111,7 +170,6 @@ const Navbar = () => {
               </a>
             </div>
           )}
-
           <Button
             color="error"
             variant="contained"

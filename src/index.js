@@ -31,7 +31,7 @@ const router = createBrowserRouter([
         <App></App>
       </AuthProvider>
     ),
-    children:[
+    children: [
       {
         path: "/create_team",
         element: <CreateTeam></CreateTeam>,
@@ -82,9 +82,9 @@ const router = createBrowserRouter([
       },
       {
         path: "/teamview",
-        element: <TeamView></TeamView> 
-      }
-    ]
+        element: <TeamView></TeamView>,
+      },
+    ],
   },
   {
     path: "/login",
@@ -117,8 +117,7 @@ const router = createBrowserRouter([
         <Signup2fa></Signup2fa>
       </AuthProvider>
     ),
-  }
-  
+  },
 ]);
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
