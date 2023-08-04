@@ -421,7 +421,6 @@ const Details = ({ details }) => {
           let resData = res.data;
           Object.assign(resData, details);
           setData(resData);
-          console.log(data);
           setIsLoadingData(false);
         })
         .catch((error) => {
