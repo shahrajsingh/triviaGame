@@ -71,10 +71,6 @@ const router = createBrowserRouter([
         path: "/leaderboard",
         element: <Leaderboard></Leaderboard>,
       },
-      {
-        path: "/chat",
-        element: <Lex />,
-      },
     ],
   },
   {

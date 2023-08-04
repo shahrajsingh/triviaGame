@@ -8,23 +8,29 @@ import Button from "@mui/material/Button";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import GamepadIcon from "@mui/icons-material/Gamepad";
 import LeaderboardIcon from "@mui/icons-material/Leaderboard";
+
 import { useAuth } from "../authentication/authContext";
 import { updateUserLoginStatus } from "../authentication/dynamoDb";
 import { auth } from "../authentication/firebase";
 import { signOut } from "firebase/auth";
+import { Create, Group } from "@mui/icons-material";
+import QuizIcon from "@mui/icons-material/Quiz";
 
-const onLogout = async () =>{
-  await signOut(auth).then((res)=>{  
-    updateUserLoginStatus(window.localStorage.getItem("userEmail"),false);
-    localStorage.clear();
-  }).catch(error=>{
-    console.error(error);
-    alert("error while logging out");
-  })
+const onLogout = async () => {
+  await signOut(auth)
+    .then((res) => {
+      updateUserLoginStatus(window.localStorage.getItem("userEmail"), false);
+      localStorage.clear();
+    })
+    .catch((error) => {
+      console.error(error);
+      alert("error while logging out");
+    });
 };
 
 const Navbar = () => {
-  const {setIsAuthenticated} = useAuth();
+  const isAdmin = localStorage.getItem("isAdmin") === "true";
+  const { setIsAuthenticated } = useAuth();
   return (
     <div>
       <AppBar
@@ -40,6 +46,20 @@ const Navbar = () => {
           >
             Trivia Titans
           </Typography>
+          {isAdmin && (
+            <a
+              href="/admin/home"
+              style={{ color: "inherit", textDecoration: "none" }}
+            >
+              <Button
+                color="inherit"
+                aria-label="All Quiz"
+                startIcon={<QuizIcon />}
+              >
+                Quizzes
+              </Button>
+            </a>
+          )}
           <a
             href="/create_team"
             style={{ color: "inherit", textDecoration: "none" }}
@@ -47,7 +67,7 @@ const Navbar = () => {
             <Button
               color="inherit"
               aria-label="leaderboard"
-              startIcon={<LeaderboardIcon />}
+              startIcon={<Group />}
             >
               Teams
             </Button>
@@ -73,10 +93,17 @@ const Navbar = () => {
               Profile
             </Button>
           </a>
-          <Button  color="error" variant="contained" className="logout-button" onClick={()=>{
-            onLogout();
-            setIsAuthenticated(false);
-          }}>Logout</Button>
+          <Button
+            color="error"
+            variant="contained"
+            className="logout-button"
+            onClick={() => {
+              onLogout();
+              setIsAuthenticated(false);
+            }}
+          >
+            Logout
+          </Button>
         </Toolbar>
       </AppBar>
     </div>
