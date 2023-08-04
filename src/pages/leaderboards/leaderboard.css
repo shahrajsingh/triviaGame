@@ -18,6 +18,12 @@
   height: 38px;
   font-size: 16px;
 }
+.select-cetagory{
+  width: 164px;
+  height: 38px;
+  font-size: 16px;
+  margin-right: 12px;
+}
 .leaderboard-table-container {
   width: 100%;
   flex-grow: 1;
