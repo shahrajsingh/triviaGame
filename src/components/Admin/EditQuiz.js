@@ -24,7 +24,7 @@ const EditQuiz = () => {
     quizNumber: "",
     quizCategory: "",
     quizLevel: "",
-    quizStartTime: "",
+    quizExpiry: "",
     timeLimit: "",
     quizName: "",
     quizDescription: "",
@@ -34,7 +34,11 @@ const EditQuiz = () => {
     try {
       const decodedQuizData = decodeURIComponent(encodedQuizData);
       const quiz = JSON.parse(decodedQuizData);
-      setQuizData(quiz);
+      setQuizData((prevData) => ({
+        ...prevData,
+        quizExpiry: quiz.quizStartTime,
+        ...quiz,
+      }));
     } catch (error) {
       console.error("Error decoding quiz data:", error);
       navigate("/admin/quizhome");
@@ -44,9 +48,10 @@ const EditQuiz = () => {
   const handleChange = (event) => {
     const { name, value } = event.target;
 
-    if (name === "quizStartTime") {
+    if (name === "quizExpiry") {
       // Format the date string as required (remove "T" and seconds)
-      const formattedDate = value.replace("T", " ").substring(0, 16);
+      const formattedDate = value.replace(/T/g, " ").substring(0, 16);
+      console.log(formattedDate);
       setQuizData((prevData) => ({
         ...prevData,
         [name]: formattedDate,
@@ -77,7 +82,7 @@ const EditQuiz = () => {
           body: JSON.stringify(quizData),
         }
       );
-
+      console.log(quizData.quizExpiry);
       if (response.ok) {
         navigate("/admin/home");
       } else {
@@ -387,7 +392,7 @@ const EditQuiz = () => {
                 label="Quiz Start Time"
                 name="quizExpiry"
                 type="datetime-local"
-                value={quizData.quizStartTime}
+                value={quizData.quizExpiry}
                 onChange={handleChange}
                 InputLabelProps={{
                   shrink: true,

@@ -1,82 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Typography, Box, Container, ListItem, List } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import ChatBox from "./ChatBox";
 
 const Quiz = () => {
   const changePage = useNavigate();
-
-  const questionData = {
-    questions: [
-      {
-        uuidKey: "00f2dee5-22ac-11ee-8a82-17fade5c179d",
-        questionCategory: "space",
-        questionLevel: "easy",
-        correctAnswer: "NASA",
-        options: ["ESA (European Space Agency)", "NASA", "Roscosmos", "SpaceX"],
-        question:
-          "Which space agency successfully landed the Curiosity rover on Mars?",
-      },
-      {
-        uuidKey: "4dec1214-22ac-11ee-a9c5-97914c8638e9",
-        questionCategory: "space",
-        questionLevel: "easy",
-        correctAnswer: "Sirius",
-        options: ["Betelgeuse", "Polaris", "Proxima Centauri", "Sirius"],
-        question: "What is the name of the brightest star in the night sky?",
-      },
-      {
-        uuidKey: "5685f4e0-e5af-4ad6-a3f1-cf4640697509",
-        questionCategory: "space",
-        questionLevel: "easy",
-        correctAnswer: "Indian Space Research Organisation",
-        options: [
-          "Indian Space Research Organisation",
-          "Indonesian Space Research Organisation",
-        ],
-        question: "What is ISRO full form?",
-      },
-      {
-        uuidKey: "6834e469-22ac-11ee-84bc-b1f0d689b241",
-        questionCategory: "space",
-        questionLevel: "easy",
-        correctAnswer: "Hubble Space Telescope",
-        options: [
-          "Hubble Space Telescope",
-          "James Webb Space Telescope",
-          "Kepler Space Telescope",
-          "Spitzer Space Telescope",
-        ],
-        question:
-          "Which space telescope was launched by NASA in 1990 and has provided stunning images of deep space?",
-      },
-      {
-        uuidKey: "891f9a58-3848-4172-9176-61ccd4b01cd2",
-        questionCategory: "space",
-        questionLevel: "easy",
-        correctAnswer: "Apollo 11",
-        options: ["Apollo 11", "Hubble Space Telescope", "kanna"],
-        question: "Which spacecraft was the first to land humans on the Moon?",
-      },
-      {
-        uuidKey: "dcd49ce4-22aa-11ee-83f3-85d89ddc815f",
-        questionCategory: "space",
-        questionLevel: "easy",
-        correctAnswer: "Mars",
-        options: ["Jupiter", "Mars", "Saturn", "Venus"],
-        question: "Which planet is known as the 'Red Planet'?",
-      },
-      {
-        uuidKey: "e78aa87b-22ab-11ee-ad2d-6f23f85538ca",
-        questionCategory: "space",
-        questionLevel: "easy",
-        correctAnswer: "Titan",
-        options: ["Europa", "Ganymede", "Io", "Titan"],
-        question: "What is the name of the largest moon in our solar system?",
-      },
-    ],
-  };
 
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedOption, setSelectedOption] = useState("");
@@ -87,6 +16,31 @@ const Quiz = () => {
   const [userRank, setUserRank] = useState(0);
   const [teamLeaderboard, setTeamLeaderboard] = useState([]);
 
+  // const { quizNumber, teamId, teamName, userName, userEmail, start } =
+  //   useParams();
+  // const navigate = useNavigate();
+
+  const [questionData, setQuestionData] = useState({ questions: [] });
+
+  useEffect(() => {
+    // Fetch questions from the API based on the quizNumber
+    axios
+      .post(
+        "https://d8nbpcntna.execute-api.us-east-1.amazonaws.com/serverless/getquestions",
+        { quizNumber: "5" }
+      )
+      .then((response) => {
+        if (response.data && response.data.body) {
+          console.log(response.data.body.questions);
+          setQuestionData({ questions: response.data.body.questions });
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching questions:", error);
+        // Optionally, you can navigate to an error page here if fetching questions fails.
+      });
+  }, []);
+
   useEffect(() => {
     const countdown = setInterval(() => {
       setTimer((prevTimer) => prevTimer - 1);
@@ -95,47 +49,49 @@ const Quiz = () => {
     if (timer === 0) {
       clearInterval(countdown);
       setTimerComplete(true);
-      setTimeout(handleNextQuestion, 5000); // Move to next question after 5 seconds
+      setTimeout(handleNextQuestion, 5000);
     }
 
     return () => clearInterval(countdown);
   }, [timer]);
 
   useEffect(() => {
-    //Firstly show the team score
     axios
       .post(
         "https://us-central1-sdp-project-392915.cloudfunctions.net/function-2",
         {
-          game_id: "12abcd",
-          team_id: "34efgh",
+          game_id: "5",
+          team_id: "f21a2cb059c442ea84caa627c17729f8",
         }
       )
       .then((response) => {
-        // setTeamScore(response.data.totalPoints);
+        console.log(response.data);
+        setTeamScore(response.data.totalPoints);
       })
       .then(() => {
         axios
           .post(
             "https://us-central1-sdp-project-392915.cloudfunctions.net/function-3",
             {
-              game_id: "12abcd",
-              user_id: "margin",
+              game_id: "5",
+              user_id: "panepa2319@weizixu.com",
             }
           )
           .then((response) => {
-            // setUserRank(response.data.rank);
+            console.log(response.data.rank);
+            setUserRank(response.data.rank);
           })
           .then(() => {
             axios
               .post(
                 "https://us-central1-sdp-project-392915.cloudfunctions.net/function-4",
                 {
-                  game_id: "12abcd",
+                  game_id: "5",
                 }
               )
-              .then((response) => {
-                //setTeamLeaderboard(response.data.teamLeaderboard);
+              .then((res) => {
+                console.log(res.data);
+                setTeamLeaderboard(res.data);
               })
               .catch((error) => {
                 console.error("Failed to fetch team leaderboard:", error);
@@ -171,12 +127,12 @@ const Quiz = () => {
       .post(
         "https://us-central1-sdp-project-392915.cloudfunctions.net/function-1",
         {
-          team_name: "margin",
+          team_name: "Enchanting Sloth",
           user_name: "margin0607",
-          category: "geography", // quesiton list
-          game_id: "12abcd",
-          team_id: "34efgh",
-          user_id: "margin",
+          category: questionData.questions[0].questionCategory,
+          game_id: "5",
+          team_id: "f21a2cb059c442ea84caa627c17729f8",
+          user_id: "panepa2319@weizixu.com",
           points: scoreUpdate,
         }
       )
@@ -188,36 +144,36 @@ const Quiz = () => {
           .post(
             "https://us-central1-sdp-project-392915.cloudfunctions.net/function-2",
             {
-              game_id: "12abcd",
-              team_id: "34efgh",
+              game_id: "5",
+              team_id: "f21a2cb059c442ea84caa627c17729f8",
             }
           )
           .then((response) => {
-            //  setTeamScore(response.data.totalPoints);
+            setTeamScore(response.data.totalPoints);
           })
           .then(() => {
             axios
               .post(
                 "https://us-central1-sdp-project-392915.cloudfunctions.net/function-3",
                 {
-                  game_id: "12abcd",
-                  user_id: "margin",
+                  game_id: "5",
+                  user_id: "panepa2319@weizixu.com",
                 }
               )
               .then((response) => {
-                // setUserRank(response.data.rank);
+                setUserRank(response.data.rank);
               })
               .then(() => {
                 axios
                   .post(
                     "https://us-central1-sdp-project-392915.cloudfunctions.net/function-4",
                     {
-                      game_id: "12abcd",
+                      game_id: "5",
                     }
                   )
                   .then((response) => {
-                    console.log(response.data.teamLeaderboard);
-                    //setTeamLeaderboard(response.data.teamLeaderboard);
+                    console.log(response.data);
+                    setTeamLeaderboard(response.data);
                   })
                   .catch((error) => {
                     console.error("Failed to fetch team leaderboard:", error);
@@ -243,8 +199,10 @@ const Quiz = () => {
     }
   };
 
-  const currentQuestion = questionData.questions[currentQuestionIndex];
-
+  const currentQuestion = questionData?.questions[currentQuestionIndex];
+  if (questionData.questions.length === 0) {
+    return <div>Loading...</div>; // You can replace this with your custom loading component
+  }
   return (
     <>
       <Box display="flex">
@@ -356,7 +314,7 @@ const Quiz = () => {
                 >
                   <Box p={1}>
                     <Typography variant="body1">
-                      Team ID: {team.team_id}
+                      Team Name: {team.team_name}
                     </Typography>
                   </Box>
                   <Box p={1} bgcolor="#2196f3" borderRadius={8}>
@@ -370,7 +328,7 @@ const Quiz = () => {
           </Box>
         </Container>
       </Box>
-      <ChatBox />
+      <ChatBox teamId="f21a2cb059c442ea84caa627c17729f8" gameId="5" />
     </>
   );
 };

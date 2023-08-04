@@ -10,9 +10,9 @@ const BufferPage = () => {
   const teamName = searchParams.get("teamname");
   const userName = searchParams.get("userName");
   const userEmail = searchParams.get("useremail");
-  //const start = searchParams.get("start");
+  const start = searchParams.get("start");
 
-  const start = "2023-08-04 18:39";
+  // const start = "2023-08-04 18:39";
   const startTimestamp = new Date(start).getTime();
   const now = new Date().getTime();
   const timeRemaining = Math.max(0, startTimestamp - now);
