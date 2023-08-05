@@ -33,14 +33,16 @@ const SendMessage = ({ scroll }) => {
       alert("Enter a valid message");
       return;
     }
-    const user_name = "vatsal1524";
+    const user_name = window.localStorage.getItem("userName");
+    const game_id = window.localStorage.getItem("gameId");
+    const team_id = window.localStorage.getItem("teamId");
 
     await addDoc(collection(db, "messages"), {
       message: message,
       user_name: user_name,
       createdAt: serverTimestamp(),
-      game_id: "abcd",
-      team_id: "ijkl",
+      game_id: game_id,
+      team_id: team_id,
     });
     setMessage("");
 

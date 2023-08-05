@@ -9,7 +9,7 @@ const useStyles = makeStyles((theme) => ({
     color: "#1c2c4c",
     width: "max-content",
     maxWidth: "calc(100% - 50px)",
-    boxShadow: "-1px 1px 1px 1px #4c768d", // Adjust the boxShadow for right chat bubble
+    boxShadow: "-1px 1px 1px 1px #4c768d",
     display: "flex",
     alignItems: "flex-start",
     marginBottom: theme.spacing(1),
@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: "auto",
     borderRadius: "20px 20px 0 20px",
     background: "#fff",
-    boxShadow: "-1px 1px 1px 1px #88dded", // Adjust the boxShadow for left chat bubble
+    boxShadow: "-1px 1px 1px 1px #88dded",
   },
   chatBubbleLeft: {
     marginRight: theme.spacing(1),
@@ -32,7 +32,6 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     justifyContent: "center",
     padding: theme.spacing(0.5),
-    // Add a border to the left chat bubble
   },
 
   userName: {
@@ -50,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Message = ({ message }) => {
   const classes = useStyles();
-  const user_name = "vatsal1524";
+  const user_name = window.localStorage.getItem("userName");
 
   return (
     <div
