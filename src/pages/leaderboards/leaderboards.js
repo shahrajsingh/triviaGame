@@ -42,6 +42,7 @@ const Leaderboard = () => {
     setIsLoading(false);
   };
 
+  // Async function to fetch player data from an API endpoint.
   const getPlayerData = async (categ) => {
     setIsLoading(true);
     if (categ && categ !== "") {
@@ -81,6 +82,7 @@ const Leaderboard = () => {
     }
   };
 
+  // Function to process team data and update the team rankings state.
   const processTeamData = (data) => {
     let teamData = [];
     if (Array.isArray(data)) {
@@ -94,6 +96,7 @@ const Leaderboard = () => {
     setIsLoading(false);
   };
 
+   // Async function to fetch team data from an API endpoint.
   const getTeamData = async (categ) => {
     setIsLoading(true);
     if (categ && categ !== "") {
@@ -133,10 +136,12 @@ const Leaderboard = () => {
     }
   };
 
+  // useEffect hook to reset detailed statistics when leaderboard type changes.
   useEffect(() => {
     setDetailedStatics(null);
   }, [leaderboardType]);
 
+  // useEffect hook to fetch data when leaderboard type, time frame or category changes.
   useEffect(() => {
     // Simulating API call with mock response
     if (leaderboardType === "player") {
@@ -146,6 +151,7 @@ const Leaderboard = () => {
     }
   }, [leaderboardType, timeFrame, category]);
 
+  // Render the leaderboard component.
   return (
     <div className="container">
       <Filter
@@ -217,6 +223,7 @@ const Leaderboard = () => {
   );
 };
 
+// The Filter component is a functional component that manages the filters for the leaderboard.
 const Filter = ({
   setTimeFrame,
   timeFrame,
@@ -225,10 +232,12 @@ const Filter = ({
   setCategory,
   category,
 }) => {
+  // Function to handle changes in the time frame filter.
   const handleFilterChange = (e) => {
     setTimeFrame(e.target.value);
   };
 
+  // Function to handle changes in the category filter.
   const handleCategoryChange = (e) => {
     if (e.target.value === "any") {
       setCategory("");
@@ -237,6 +246,7 @@ const Filter = ({
     }
   };
 
+  // Render the Filter component.
   return (
     <div>
       <AppBar position="static">
@@ -299,7 +309,10 @@ const Filter = ({
   );
 };
 
+// The RankingTable component is a functional component that displays the leaderboard rankings in a table.
+
 const RankingTable = ({ title, rankings, isLoading, setDetailedStatics }) => (
+  // The container for the leaderboard table.
   <div className="leaderboard-table-container" style={{ position: "relative" }}>
     <Table stickyHeader style={{ position: "fixed", maxWidth: "48%" }}>
       <TableHead>
