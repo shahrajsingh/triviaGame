@@ -203,7 +203,7 @@ const Quiz = () => {
 
   const currentQuestion = questionData?.questions[currentQuestionIndex];
   if (questionData.questions.length === 0) {
-    return <div>Loading...</div>; // You can replace this with your custom loading component
+    return <div>Loading...</div>;
   }
   return (
     <>

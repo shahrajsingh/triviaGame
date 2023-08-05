@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import "./BufferPage.css"; // Import the CSS file for custom styling
-
+import "./BufferPage.css";
 const BufferPage = () => {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
@@ -29,7 +28,6 @@ const BufferPage = () => {
 
   useEffect(() => {
     if (countdown === 0) {
-      // Navigate to /startquiz page when the countdown is over
       navigate(
         `/startquiz/?quizNumber=${quizNumber}&teamId=${teamId}&teamName=${teamName}&userName=${userName}&userEmail=${userEmail}`
       );
@@ -49,7 +47,6 @@ const BufferPage = () => {
   return (
     <div className="loader-container">
       <div className="message">Game starting in:</div>
-      {/* Your buffering animation here */}
       <div className="loader-circle"></div>
       <div className="loader-timer">{formatTime(countdown)}</div>
     </div>
