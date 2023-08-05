@@ -4,7 +4,9 @@ import { useNavigate, useLocation } from "react-router-dom";
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(window.localStorage.getItem("userEmail") ? true:false);
+  const [isAuthenticated, setIsAuthenticated] = useState(
+    window.localStorage.getItem("userEmail") ? true : false
+  );
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -13,17 +15,33 @@ export const AuthProvider = ({ children }) => {
       "/signup": 1,
       "/create2fa": 2,
       "/complete2fa": 3,
-      "/resetpassword": 4
+      "/resetpassword": 4,
     };
 
     if (isAuthenticated) {
-      //
+      const path = location.pathname;
+      if (window.localStorage.getItem("isAdmin") === "true") {
+        if (path.includes("/admin")) {
+          //
+        } else {
+          navigate("/admin/home");
+        }
+      } else {
+        if (path.includes("/admin")) {
+          navigate("/teamview");
+        } else {
+          //
+        }
+      }
     } else if (exemptedRoutes[location.pathname]) {
       const user = window.localStorage.getItem("userEmail");
       if (!user) {
-        if(location.pathname === "/signup" || location.pathname === "/resetpassword"){
-//
-        }else{
+        if (
+          location.pathname === "/signup" ||
+          location.pathname === "/resetpassword"
+        ) {
+          //
+        } else {
           navigate("/login");
         }
       }

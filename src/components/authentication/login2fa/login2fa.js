@@ -38,7 +38,12 @@ const Login2fa = () => {
                 window.localStorage.setItem("userFullName", userFullName);
                 window.localStorage.setItem("isAdmin", isAdmin);
                 setIsAuthenticated(true);
-                navigate("/teamview");
+                if(isAdmin){
+                    navigate("/admin/home");
+                }else{
+                    navigate("/teamview");
+                }
+               
             }else if(res.data.statusCode === 400 && res.data.body === "Answers do not match"){
                 alert("Answer does not match, Please try again");
             }else {
