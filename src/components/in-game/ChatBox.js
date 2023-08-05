@@ -38,11 +38,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ChatBox = ({ teamId, gameId }) => {
+const ChatBox = ({ teamId, gameId, userName }) => {
   const classes = useStyles();
   const [messages, setMessages] = useState([]);
   const scroll = useRef();
-
+  console.log(teamId);
   useEffect(() => {
     const q = query(
       collection(db, "messages"),
@@ -75,11 +75,16 @@ const ChatBox = ({ teamId, gameId }) => {
     <Box className={classes.chatBox}>
       <Box className={classes.messagesWrapper}>
         {messages?.map((message) => (
-          <Message key={message.id} message={message} />
+          <Message key={message.id} message={message} userName={userName} />
         ))}
         <span ref={scroll}></span>
       </Box>
-      <SendMessage scroll={scroll} />
+      <SendMessage
+        scroll={scroll}
+        game_id={gameId}
+        team_id={teamId}
+        userName={userName}
+      />
     </Box>
   );
 };

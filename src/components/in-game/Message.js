@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
@@ -47,19 +47,19 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Message = ({ message }) => {
+const Message = ({ message, userName }) => {
   const classes = useStyles();
-  const user_name = window.localStorage.getItem("userName");
 
+  console.log(userName);
   return (
     <div
       className={`${classes.chatBubble} ${
-        message.user_name === user_name
+        message.user_name === userName
           ? classes.chatBubbleRight
           : classes.chatBubbleLeft
       }`}
     >
-      {message.user_name !== user_name && (
+      {message.user_name !== userName && (
         <div className={classes.chatBubbleLeft} />
       )}
       <div className={classes.chatBubble__right}>
