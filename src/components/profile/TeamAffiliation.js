@@ -7,67 +7,166 @@ import {
   List,
   ListItem,
   ListItemText,
+  Snackbar,
+  SnackbarContent,
 } from "@material-ui/core";
 import axios from "axios";
 
 const StyledButton = withStyles((theme) => ({
   root: {
     marginLeft: theme.spacing(2),
+    backgroundColor: theme.palette.error.light,
+    color: theme.palette.error.main,
+    "&:hover": {
+      backgroundColor: theme.palette.error.main,
+      color: theme.palette.common.white,
+    },
   },
 }))(Button);
 
 const TeamAffiliation = () => {
-  const [teamIds, setTeamIds] = useState([]);
-  const user = "3";
+  const [teams, setTeams] = useState([]);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const userName = window.localStorage.getItem("userName");
 
   useEffect(() => {
-    const fetchTeamIds = async () => {
+    const fetchTeams = async () => {
       try {
         const response = await axios.post(
-          "https://s7fiay3dfvembjxn4awn7c5bm40rvxtc.lambda-url.us-east-1.on.aws",
-          { id: user }
+          "https://scwmimxeql.execute-api.us-east-1.amazonaws.com/dev/get-all-teams",
+          { username: userName }
         );
-        const teamIds = response.data;
-        console.log(teamIds);
-        setTeamIds(teamIds);
+        const teamsData = response.data.body.teams;
+        setTeams(teamsData);
       } catch (error) {
-        console.error("Error while fetching team IDs:", error);
+        console.error("Error while fetching teams:", error);
       }
     };
 
-    fetchTeamIds();
-  }, []);
+    fetchTeams();
+  }, [userName]);
 
-  const handleManageClick = (teamId) => {
-    // Logic to handle the "Manage Team" button click
-    // You can navigate to a new page or perform any other action here based on the teamId
-    console.log(`Manage Team clicked for teamId: ${teamId}`);
+  const handleLeaveClick = (teamId) => {
+    axios
+      .post(
+        "https://scwmimxeql.execute-api.us-east-1.amazonaws.com/dev/leave-team",
+        {
+          team_id: teamId,
+          user_id: userName,
+        }
+      )
+      .then(() => {
+        setTeams((prevTeams) => prevTeams.filter((team) => team.id !== teamId));
+        console.log(`Leave Team clicked for teamId: ${teamId}`);
+        setSnackbarMessage("Successfully left the team!");
+        setSnackbarOpen(true);
+      })
+      .catch((err) => {
+        console.log(err);
+        setSnackbarMessage("Error leaving the team!");
+        setSnackbarOpen(true);
+      });
+  };
+
+  const handleSnackbarClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setSnackbarOpen(false);
   };
 
   return (
-    <Grid container alignItems="center">
+    <Grid
+      container
+      alignItems="center"
+      style={{
+        background: "#f0f7f9",
+        padding: "16px",
+        borderRadius: "8px",
+        boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
+      }}
+    >
       <Grid item xs={6}>
-        <Typography variant="h5">Team's</Typography>
+        <Typography
+          variant="h5"
+          style={{
+            color: "#333",
+            fontFamily: "Arial, sans-serif",
+            fontWeight: "bold",
+          }}
+        >
+          Your Teams
+        </Typography>
       </Grid>
-      <Grid item xs={6} container>
-        <Typography variant="h5">Manage Teams</Typography>
+      <Grid item xs={6} container justify="flex-end">
+        <Typography
+          variant="h5"
+          style={{
+            color: "#333",
+            fontFamily: "Arial, sans-serif",
+            fontWeight: "bold",
+          }}
+        >
+          Manage Teams
+        </Typography>
       </Grid>
-      <Grid item xs={9}>
+      <Grid item xs={12}>
         <List>
-          {teamIds.map((team) => (
-            <ListItem key={team.teamId}>
-              <ListItemText primary={team.teamId} />
+          {teams.map((team) => (
+            <ListItem
+              key={team.id}
+              style={{
+                background: "#fff",
+                margin: "8px",
+                borderRadius: "8px",
+                padding: "12px",
+                display: "flex",
+                alignItems: "center",
+                boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
+              }}
+            >
+              <ListItemText
+                primary={team.name}
+                style={{
+                  flex: "1",
+                  color: "#333",
+                  fontFamily: "Arial, sans-serif",
+                  fontWeight: "bold",
+                }}
+              />
               <StyledButton
                 variant="contained"
-                color="primary"
-                onClick={() => handleManageClick(team.teamId)}
+                onClick={() => handleLeaveClick(team.id)}
+                style={{
+                  background: "#FF4F64",
+                  color: "#fff",
+                  fontFamily: "Arial, sans-serif",
+                  fontWeight: "bold",
+                  marginLeft: "16px",
+                }}
               >
-                Manage
+                Leave
               </StyledButton>
             </ListItem>
           ))}
         </List>
       </Grid>
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={2000}
+        onClose={handleSnackbarClose}
+      >
+        <SnackbarContent
+          style={{
+            background: snackbarMessage.includes("Successfully")
+              ? "#4CAF50"
+              : "#F44336",
+          }}
+          message={snackbarMessage}
+        />
+      </Snackbar>
     </Grid>
   );
 };

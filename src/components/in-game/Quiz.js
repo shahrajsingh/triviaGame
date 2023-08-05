@@ -28,7 +28,7 @@ const Quiz = () => {
 
   useEffect(() => {
     console.log(quizNumber);
-    // Fetch questions from the API based on the quizNumber
+
     axios
       .post(
         "https://d8nbpcntna.execute-api.us-east-1.amazonaws.com/serverless/getquestions",
@@ -42,7 +42,6 @@ const Quiz = () => {
       })
       .catch((error) => {
         console.error("Error fetching questions:", error);
-        // Optionally, you can navigate to an error page here if fetching questions fails.
       });
   }, []);
 
@@ -196,9 +195,7 @@ const Quiz = () => {
         console.error("Failed to update score:", error);
       });
     if (currentQuestionIndex === questionData.questions.length - 1) {
-      // Redirect to home page if all questions are answered
       changePage("/");
-      // Send score update to the server
     } else {
       setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
     }

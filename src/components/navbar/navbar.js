@@ -74,7 +74,7 @@ const Navbar = () => {
                 </Button>
               </a>
               <a
-                href="/admin/home"
+                href="/admin/analytics"
                 style={{ color: "inherit", textDecoration: "none" }}
               >
                 <Button
@@ -89,7 +89,6 @@ const Navbar = () => {
           )}
           {!isAdmin && (
             <div>
-              {/* Team Button with Dropdown Menu */}
               <Button
                 color="inherit"
                 aria-controls="team-menu"
