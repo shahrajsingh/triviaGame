@@ -23,19 +23,16 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const SendMessage = ({ scroll }) => {
+const SendMessage = ({ scroll, team_id, game_id, userName }) => {
   const classes = useStyles();
   const [message, setMessage] = useState("");
-
+  const user_name = userName;
   const sendMessage = async (event) => {
     event.preventDefault();
     if (message.trim() === "") {
       alert("Enter a valid message");
       return;
     }
-    const user_name = window.localStorage.getItem("userName");
-    const game_id = window.localStorage.getItem("gameId");
-    const team_id = window.localStorage.getItem("teamId");
 
     await addDoc(collection(db, "messages"), {
       message: message,

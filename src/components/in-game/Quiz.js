@@ -333,7 +333,7 @@ const Quiz = () => {
           </Box>
         </Container>
       </Box>
-      <ChatBox teamId={teamId} gameId={quizNumber} />
+      <ChatBox teamId={teamId} gameId={quizNumber} userName={userName} />
     </>
   );
 };
