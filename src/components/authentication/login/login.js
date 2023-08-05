@@ -12,11 +12,13 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [showEmailLogin, setShowEmailLogin] = useState(false);
 
+  // Function to set user in local storage and check if user is new
   const setUser = (user) => {
     window.localStorage.setItem("userEmail", user.email);
     checkIfNewUser(user.email);
   };
 
+  // Function to check if user is new by checking in DynamoDB
   const checkIfNewUser = (async (userEmail) => {
     await getDataFromDynamoDB(userEmail).then((res) => {
       if(typeof res === "object" && Object.keys(res).length <= 0){
@@ -25,11 +27,11 @@ const Login = () => {
         navigate("/complete2fa");
       }
     }, (error) => {
-      console.error(error);
       alert(error);
     })
   });
 
+  // Function to handle sign in with email
   const signInWithEmail = async (event) => {
     event.preventDefault();
     try {
@@ -45,6 +47,7 @@ const Login = () => {
     }
   };
 
+  // Function to handle sign in with Google
   const signInWithGoogle = async () => {
     setShowEmailLogin(false);
     try {
@@ -64,6 +67,7 @@ const Login = () => {
     }
   };
 
+  // Function to handle sign in with Facebook
   const signInWithFacebook = async () => {
     setShowEmailLogin(false);
     try {
@@ -112,6 +116,5 @@ const Login = () => {
     </div>
   );
 }
-
 
 export default Login;

@@ -17,7 +17,9 @@ import Box from "@mui/material/Box";
 import { AppBar, Button, CircularProgress, Toolbar } from "@mui/material";
 import axios from "axios";
 
+// The Leaderboard component is a functional component that manages the state and behavior of the leaderboard.
 const Leaderboard = () => {
+  // State variables for time frame, player rankings, team rankings, leaderboard type, detailed statistics, category and loading status.
   const [timeFrame, setTimeFrame] = useState("all-time");
   const [playerRankings, setPlayerRankings] = useState([]);
   const [teamRankings, setTeamRankings] = useState([]);
@@ -26,12 +28,7 @@ const Leaderboard = () => {
   const [category, setCategory] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const userDetails = {
-    userFullName: window.localStorage.getItem("userFullName"),
-    userName: window.localStorage.getItem("userName"),
-    userEmail: window.localStorage.getItem("userEmail"),
-  };
-
+  // Function to process player data and update the player rankings state.
   const processPlayerData = (data) => {
     let playerData = [];
     if (Array.isArray(data)) {

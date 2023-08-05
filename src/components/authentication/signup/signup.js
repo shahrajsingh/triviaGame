@@ -10,12 +10,15 @@ const Signup = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   
+  // Function to handle sign up with email
   const signUpWithEmail = async (event) => {
     event.preventDefault();
     try {
       createUserWithEmailAndPassword(auth,email,password).then((userCreds)=>{
         if(userCreds.user){
+            // Store user email in local storage
             window.localStorage.setItem("userEmail",userCreds.user.email);
+            // Navigate to 2FA creation page
             navigate("/create2fa");
         }
       }).catch((error) => {

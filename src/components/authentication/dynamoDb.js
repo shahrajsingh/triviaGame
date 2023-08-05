@@ -1,6 +1,6 @@
 import axios from "axios";
 
-
+// Function to update the login status of a user
 export const updateUserLoginStatus = async (userEmail, isLoggedIn) => {
   await axios
     .post(
@@ -11,7 +11,7 @@ export const updateUserLoginStatus = async (userEmail, isLoggedIn) => {
       }
     )
     .then((res) => {
-      // got the response
+      // Handle the response here if needed
     })
     .catch((error) => {
       console.error(error);
@@ -19,6 +19,7 @@ export const updateUserLoginStatus = async (userEmail, isLoggedIn) => {
     });
 };
 
+// Function to store user data in DynamoDB
 export const storeDataInDynamoDB = async (
   userEmail,
   userName,
@@ -54,6 +55,7 @@ export const storeDataInDynamoDB = async (
   return await qa2faPromise;
 };
 
+// Function to retrieve user data from DynamoDB
 export const getDataFromDynamoDB = async (userId) => {
   const getDataPromise = new Promise((resolve, reject) => {
     axios

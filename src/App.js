@@ -8,7 +8,7 @@ function App() {
   const location = useLocation();
   const navigate = useNavigate();
   useEffect(() => {
-    if (location.pathname == "/") {
+    if (location.pathname === "/") {
       navigate("/teamview");
     }
   });

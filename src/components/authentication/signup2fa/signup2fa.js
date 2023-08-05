@@ -6,15 +6,18 @@ import { storeDataInDynamoDB } from "../dynamoDb";
 import { useNavigate } from "react-router-dom";
 
 const Signup2fa = () => {
+    // Questions for 2FA
     const qa = ["what is your childhood nickname",
         "where were you born",
         "what is the name of your first pet"
     ];
 
+    // State variables for user details
     const [userName, setUserName] = useState(window.localStorage.getItem("userName"));
     const [userFullName, setUserFullName] = useState(window.localStorage.getItem("userFullName"));
     const userEmail = window.localStorage.getItem("userEmail");
 
+    // State variables for form fields
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [q1a1, setQ1A1] = useState("");
@@ -24,6 +27,7 @@ const Signup2fa = () => {
 
     const navigate = useNavigate();
 
+    // Check if additional user details are available
     useEffect(() => {
         if (userEmail && userName && userFullName) {
           setAdditionalUserDetails(true);
@@ -32,6 +36,7 @@ const Signup2fa = () => {
         }
       }, [userEmail, userFullName, userName]);
 
+    // Function to handle 2FA submission
     const submitqa2fa = useCallback(async (event) => {
         event.preventDefault();
         let qa2fa = {};
@@ -53,6 +58,7 @@ const Signup2fa = () => {
         }
     }, [q1a1, q2a2, q3a3, additionalUserDetails, userEmail, userName, userFullName, navigate]);
 
+    // Function to handle user details submission
     const submitUserDetails = useCallback(async (event) => {
         event.preventDefault();
         const fullName = firstName.toLowerCase() + " " + lastName.toLowerCase();

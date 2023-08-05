@@ -21,6 +21,7 @@ const Login2fa = () => {
 
     const navigate = useNavigate();
 
+    // Function to handle 2FA submission
     const submitLogin2fa = async (event) => {
         event.preventDefault();
         const payload = {
@@ -51,10 +52,10 @@ const Login2fa = () => {
             }
         }).catch((error)=>{
             alert(error.message);
-            console.error(error);
         });
     };
 
+    // Function to fetch 2FA data from DynamoDB
     const getData = async () => {
         if (!user) {
             alert("Error while fetching 2fa data");
@@ -81,6 +82,7 @@ const Login2fa = () => {
         }
     }
 
+    // Fetch 2FA data on component mount
     useEffect(() => {
         getData();
     }, []);
