@@ -39,8 +39,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const ChatBox = ({ teamId, gameId }) => {
-  teamId = "ijkl";
-  gameId = "abcd";
   const classes = useStyles();
   const [messages, setMessages] = useState([]);
   const scroll = useRef();

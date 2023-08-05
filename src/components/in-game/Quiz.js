@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Typography, Box, Container, ListItem, List } from "@mui/material";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import ChatBox from "./ChatBox";
 
@@ -16,18 +16,23 @@ const Quiz = () => {
   const [userRank, setUserRank] = useState(0);
   const [teamLeaderboard, setTeamLeaderboard] = useState([]);
 
-  // const { quizNumber, teamId, teamName, userName, userEmail, start } =
-  //   useParams();
-  // const navigate = useNavigate();
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const quizNumber = searchParams.get("quizNumber");
+  const teamId = searchParams.get("teamId");
+  const teamName = searchParams.get("teamName");
+  const userName = searchParams.get("userName");
+  const userEmail = searchParams.get("userEmail");
 
   const [questionData, setQuestionData] = useState({ questions: [] });
 
   useEffect(() => {
+    console.log(quizNumber);
     // Fetch questions from the API based on the quizNumber
     axios
       .post(
         "https://d8nbpcntna.execute-api.us-east-1.amazonaws.com/serverless/getquestions",
-        { quizNumber: "5" }
+        { quizNumber: quizNumber }
       )
       .then((response) => {
         if (response.data && response.data.body) {
@@ -60,8 +65,8 @@ const Quiz = () => {
       .post(
         "https://us-central1-sdp-project-392915.cloudfunctions.net/function-2",
         {
-          game_id: "5",
-          team_id: "f21a2cb059c442ea84caa627c17729f8",
+          game_id: quizNumber,
+          team_id: teamId,
         }
       )
       .then((response) => {
@@ -73,8 +78,8 @@ const Quiz = () => {
           .post(
             "https://us-central1-sdp-project-392915.cloudfunctions.net/function-3",
             {
-              game_id: "5",
-              user_id: "panepa2319@weizixu.com",
+              game_id: quizNumber,
+              user_id: userEmail,
             }
           )
           .then((response) => {
@@ -86,7 +91,7 @@ const Quiz = () => {
               .post(
                 "https://us-central1-sdp-project-392915.cloudfunctions.net/function-4",
                 {
-                  game_id: "5",
+                  game_id: quizNumber,
                 }
               )
               .then((res) => {
@@ -127,12 +132,12 @@ const Quiz = () => {
       .post(
         "https://us-central1-sdp-project-392915.cloudfunctions.net/function-1",
         {
-          team_name: "Enchanting Sloth",
-          user_name: "margin0607",
+          team_name: teamName,
+          user_name: userName,
           category: questionData.questions[0].questionCategory,
-          game_id: "5",
-          team_id: "f21a2cb059c442ea84caa627c17729f8",
-          user_id: "panepa2319@weizixu.com",
+          game_id: quizNumber,
+          team_id: teamId,
+          user_id: userEmail,
           points: scoreUpdate,
         }
       )
@@ -144,8 +149,8 @@ const Quiz = () => {
           .post(
             "https://us-central1-sdp-project-392915.cloudfunctions.net/function-2",
             {
-              game_id: "5",
-              team_id: "f21a2cb059c442ea84caa627c17729f8",
+              game_id: quizNumber,
+              team_id: teamId,
             }
           )
           .then((response) => {
@@ -156,8 +161,8 @@ const Quiz = () => {
               .post(
                 "https://us-central1-sdp-project-392915.cloudfunctions.net/function-3",
                 {
-                  game_id: "5",
-                  user_id: "panepa2319@weizixu.com",
+                  game_id: quizNumber,
+                  user_id: userEmail,
                 }
               )
               .then((response) => {
@@ -168,7 +173,7 @@ const Quiz = () => {
                   .post(
                     "https://us-central1-sdp-project-392915.cloudfunctions.net/function-4",
                     {
-                      game_id: "5",
+                      game_id: quizNumber,
                     }
                   )
                   .then((response) => {
@@ -328,7 +333,7 @@ const Quiz = () => {
           </Box>
         </Container>
       </Box>
-      <ChatBox teamId="f21a2cb059c442ea84caa627c17729f8" gameId="5" />
+      <ChatBox teamId={teamId} gameId={quizNumber} />
     </>
   );
 };
