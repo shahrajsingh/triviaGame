@@ -119,3 +119,27 @@
   z-index: 999; 
   cursor: pointer;
 }
+
+.inviteButton {
+  background-color: #9b5de5;
+  border: none;
+  color: white; 
+  padding: 5px 10px; 
+  border-radius: 4px; 
+  font-size: 1rem; 
+  cursor: pointer; 
+  transition: background-color 0.3s; 
+}
+
+.inviteButton:hover {
+  background-color: #7e3caf;
+}
+
+.inviteButton:active {
+  background-color: #6b2a91; 
+}
+
+.inviteButton:focus {
+  outline: none; 
+  box-shadow: 0 0 0 2px #c7a4ff;
+}

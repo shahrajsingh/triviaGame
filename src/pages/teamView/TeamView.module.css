@@ -11,20 +11,21 @@
     border-collapse: collapse;
     width: 80%; 
     margin-top: 20px;
-    border: 1px solid #FFC0CB;
+    border: 1px solid silver;
     margin-bottom: 20px; 
 }
 
 .teamtable th, .teamtable td {
-    border: 1px solid #FFC0CB;
+    border: 1px solid grey;
     padding: 8px 12px;
     text-align: left;
 }
 
 .teamtable th {
-    background-color: #1769aa;
+    background-color: #1b76d2;
     font-weight: bolder;
-    font-size: 22px;
+    font-size: 20px;
+    color: white;
 }
 
 .Msg {
@@ -33,25 +34,26 @@
 }
 
 .teamtable tr:hover {
-    background-color: #FFEBE8; 
+    background-color: lightblue;
 }
 
 .joinbtn {
-    background-color: #4dabf5;
+    background-color: #1b76d2;
     border: none;
-    color: black;
+    color: white;
+    font-weight: 600;
     padding: 5px 10px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
-    font-size: 14px;
+    font-size: 16px;
     margin: 4px 2px;
     cursor: pointer;
     border-radius: 5px;
 }
 
 .joinbtn:hover {
-    background-color: #FFA8B3; 
+    background-color: #4dabf5;
 }
 
 .separator {
@@ -60,9 +62,9 @@
 }
 
 .createteambtn {
-    background-color: #4dabf5;
+    background-color: #1b76d2;
     border: none;
-    color: black;
+    color: white;
     font-weight: bolder;
     padding: 8px 15px;
     text-align: center;
@@ -74,5 +76,5 @@
 }
 
 .createteambtn:hover {
-    background-color: #1769aa; 
+    background-color: #4dabf5;
 }
