@@ -17,22 +17,6 @@ import Box from "@mui/material/Box";
 import { AppBar, Button, CircularProgress, Toolbar } from "@mui/material";
 import axios from "axios";
 
-// Mock data for players and teams
-const mockPlayerData = [
-  // Add player data here...
-  { rank: 1, name: "John Doe", score: 2000, gamesPlayed: 20, winRate: 60 },
-  { rank: 2, name: "Jane Doe", score: 1800, gamesPlayed: 18, winRate: 55 },
-  { rank: 1, name: "John Doe", score: 2000, gamesPlayed: 20, winRate: 60 },
-  { rank: 2, name: "Jane Doe", score: 1800, gamesPlayed: 18, winRate: 55 },
-  { rank: 1, name: "John Doe", score: 2000, gamesPlayed: 20, winRate: 60 },
-  { rank: 2, name: "Jane Doe", score: 1800, gamesPlayed: 18, winRate: 55 },
-  { rank: 1, name: "John Doe", score: 2000, gamesPlayed: 20, winRate: 60 },
-  { rank: 2, name: "Jane Doe", score: 1800, gamesPlayed: 18, winRate: 55 },
-  { rank: 1, name: "John Doe", score: 2000, gamesPlayed: 20, winRate: 60 },
-  { rank: 2, name: "Jane Doe", score: 1800, gamesPlayed: 18, winRate: 55 },
-  { rank: 1, name: "John Doe", score: 2000, gamesPlayed: 20, winRate: 60 },
-];
-
 const Leaderboard = () => {
   const [timeFrame, setTimeFrame] = useState("all-time");
   const [playerRankings, setPlayerRankings] = useState([]);
