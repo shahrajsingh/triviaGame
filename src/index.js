@@ -21,6 +21,7 @@ import Lobby from "./components/lobby/Lobby";
 import Leaderboard from "./pages/leaderboards/leaderboards";
 import TeamView from "./pages/teamView/TeamView";
 import BufferPage from "./components/lobby/BufferPage";
+import ForgotPassword from "./components/authentication/forgotPassword/forgotPassword";
 
 const router = createBrowserRouter([
   {
@@ -110,6 +111,14 @@ const router = createBrowserRouter([
         <Signup2fa></Signup2fa>
       </AuthProvider>
     ),
+  },
+  {
+    path: "/resetpassword",
+    element: (
+      <AuthProvider>
+        <ForgotPassword></ForgotPassword>
+      </AuthProvider>
+    )
   },
   {
     path: "/startquiz",

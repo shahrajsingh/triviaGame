@@ -13,14 +13,19 @@ export const AuthProvider = ({ children }) => {
       "/signup": 1,
       "/create2fa": 2,
       "/complete2fa": 3,
+      "/resetpassword": 4
     };
 
     if (isAuthenticated) {
       //
     } else if (exemptedRoutes[location.pathname]) {
       const user = window.localStorage.getItem("userEmail");
-      if (!user && location.pathname !== "/signup") {
-        navigate("/login");
+      if (!user) {
+        if(location.pathname === "/signup" || location.pathname === "/resetpassword"){
+//
+        }else{
+          navigate("/login");
+        }
       }
     } else {
       navigate("/login");
