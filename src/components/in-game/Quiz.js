@@ -195,7 +195,7 @@ const Quiz = () => {
         console.error("Failed to update score:", error);
       });
     if (currentQuestionIndex === questionData.questions.length - 1) {
-      changePage("/");
+      changePage("/leaderboard");
     } else {
       setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
     }

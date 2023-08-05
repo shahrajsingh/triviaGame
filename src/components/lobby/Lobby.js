@@ -23,10 +23,10 @@ import { useNavigate } from "react-router-dom";
 const theme = createTheme({
   palette: {
     primary: {
-      main: purple[500],
+      main: blue[700],
     },
     secondary: {
-      main: teal[500],
+      main: blue[200],
     },
   },
 });
@@ -121,13 +121,13 @@ const Lobby = () => {
       <div
         style={{
           padding: "20px",
-          backgroundColor: "#f5f5f5",
+          backgroundColor: "#e6f7ff",
           minHeight: "100vh",
         }}
       >
         <h1
           style={{
-            color: purple[600],
+            color: blue[600],
             marginBottom: "30px",
             textAlign: "center",
             fontSize: "42px",
@@ -144,7 +144,7 @@ const Lobby = () => {
           style={{ marginBottom: "20px" }}
         >
           <Grid item xs={12} md={4}>
-            <InputLabel style={{ color: purple[600] }}>Category:</InputLabel>
+            <InputLabel style={{ color: blue[600] }}>Category:</InputLabel>
             <Select
               value={selectedCategory}
               onChange={handleCategoryChange}
@@ -159,7 +159,7 @@ const Lobby = () => {
             </Select>
           </Grid>
           <Grid item xs={12} md={4}>
-            <InputLabel style={{ color: purple[600] }}>Difficulty:</InputLabel>
+            <InputLabel style={{ color: blue[600] }}>Difficulty:</InputLabel>
             <Select
               value={selectedDifficulty}
               onChange={handleDifficultyChange}
@@ -172,7 +172,7 @@ const Lobby = () => {
             </Select>
           </Grid>
           <Grid item xs={12} md={4}>
-            <InputLabel style={{ color: purple[600] }}>
+            <InputLabel style={{ color: blue[600] }}>
               Max Time Limit (Minutes):
             </InputLabel>
             <Slider
@@ -194,7 +194,7 @@ const Lobby = () => {
           }}
         >
           <Table style={{ backgroundColor: "#ffffff" }}>
-            <TableHead style={{ backgroundColor: teal[500], color: "#ffffff" }}>
+            <TableHead style={{ backgroundColor: blue[400], color: "#ffffff" }}>
               <TableRow>
                 <TableCell
                   style={{
@@ -383,7 +383,7 @@ const Lobby = () => {
                       >
                         <div style={{ padding: "10px" }}>
                           <p>Number of Participants: {quiz.participants}</p>
-                          <p>Time Remaining: {quiz.timeRemaining}</p>
+
                           <p>Description: {quiz.quizDescription}</p>
                         </div>
                       </Collapse>
