@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import classes from './Manageteam.module.css';
 import { getMembersById, removeTeamMember, promotionAdmin } from '../../services/teams';
+import SearchAndInviteMembers from '../../components/profile/SearchAndInviteMembers';
 
 const TeamMembers = () => {
   const [teamMembers, setTeamMembers] = useState([]);
@@ -8,7 +9,7 @@ const TeamMembers = () => {
   const [teamAdmin, setTeamAdmin] = useState('');
   const [showPopup, setShowPopup] = useState(false);
   const [popupMessage, setPopupMessage] = useState('');
-  
+  const [showInvite, setShowInvite] = useState(false);
 
   useEffect(() => {
     const fetchTeamMembers = async () => {
@@ -100,6 +101,10 @@ const TeamMembers = () => {
           </li>
         ))}
       </ul>
+      <button onClick={() => setShowInvite(prevState => !prevState)} className={classes.inviteButton}>
+        {showInvite ? 'Hide Invitations' : 'Show Invitations'}
+      </button>
+      {showInvite && <SearchAndInviteMembers teamName={teamName} />}
     </div>
   );
 };
