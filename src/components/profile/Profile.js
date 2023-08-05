@@ -9,15 +9,17 @@ import {
   Paper,
   InputAdornment,
   IconButton,
+  Snackbar,
 } from "@material-ui/core";
-import EditIcon from '@mui/icons-material/Edit';
+import EditIcon from "@mui/icons-material/Edit";
 import axios from "axios";
 import { storage } from "./firebase";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-
 const useStyles = makeStyles((theme) => ({
   root: {
     padding: theme.spacing(4),
+
+    minHeight: "50vh",
   },
   profileContainer: {
     backgroundColor: "#ffffff",
@@ -28,24 +30,28 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    marginBottom: theme.spacing(0),
+    marginBottom: theme.spacing(2),
     height: theme.spacing(32),
   },
   profilePhoto: {
     width: theme.spacing(24),
     height: theme.spacing(24),
+    border: "4px solid #ffffff",
+    boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
   },
   formField: {
     marginBottom: theme.spacing(2),
   },
-  submitButton: {
-    marginTop: theme.spacing(2),
-  },
+
   editButton: {
-    marginLeft: theme.spacing(11),
+    marginLeft: theme.spacing(2),
+    color: "#00b4db",
+  },
+  snackbar: {
+    top: theme.spacing(2),
+    right: theme.spacing(2),
   },
 }));
-
 const Profile = () => {
   const classes = useStyles();
   const [name, setName] = useState("");
@@ -53,10 +59,16 @@ const Profile = () => {
   const [photo, setPhoto] = useState("");
   const [photoup, setPhotoup] = useState("");
   const [email, setEmail] = useState("");
+  const [userName, setUserName] = useState(
+    window.localStorage.getItem("userName")
+  );
   const [isNameEditMode, setNameEditMode] = useState(false);
   const [isContactEditMode, setContactEditMode] = useState(false);
   const [isPhotoEditMode, setPhotoEditMode] = useState(false);
   const id = window.localStorage.getItem("userEmail");
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+
   useEffect(() => {
     axios
       .post(
@@ -89,7 +101,9 @@ const Profile = () => {
   const handleContactEdit = () => {
     setContactEditMode(true);
   };
-
+  const hideSnackbar = () => {
+    setSnackbarOpen(false);
+  };
   const handleFileChange = (event) => {
     const photo = event.target.files[0];
     setPhotoup(event.target.files[0]);
@@ -100,6 +114,10 @@ const Profile = () => {
     };
 
     reader.readAsDataURL(photo);
+  };
+  const showSnackbar = (message) => {
+    setSnackbarMessage(message);
+    setSnackbarOpen(true);
   };
 
   const handleSubmit = (e) => {
@@ -127,6 +145,7 @@ const Profile = () => {
               setPhoto(url);
               setNameEditMode(false);
               setContactEditMode(false);
+              showSnackbar("Profile updated successfully!");
             })
             .catch((error) => {
               console.error("Error updating user details:", error);
@@ -137,7 +156,9 @@ const Profile = () => {
         });
     });
   };
+  const defaultImageUrl = "https://m.media-amazon.com/images/I/41jLBhDISxL.jpg";
 
+  const avatarSrc = photo || defaultImageUrl;
   return (
     <div className={classes.root}>
       <Grid container justify="center">
@@ -185,10 +206,23 @@ const Profile = () => {
                             component="label"
                             onClick={handleNameEdit}
                             disabled={isNameEditMode}
+                            className={classes.editButton}
                           >
                             <EditIcon />
                           </IconButton>
                         </InputAdornment>
+                      ),
+                    }}
+                  />
+                  <TextField
+                    className={classes.formField}
+                    label="Username"
+                    value={userName}
+                    fullWidth
+                    InputProps={{
+                      readOnly: true,
+                      endAdornment: (
+                        <InputAdornment position="end"></InputAdornment>
                       ),
                     }}
                   />
@@ -206,6 +240,7 @@ const Profile = () => {
                             component="label"
                             onClick={handleContactEdit}
                             disabled={isContactEditMode}
+                            className={classes.editButton}
                           >
                             <EditIcon />
                           </IconButton>
@@ -225,12 +260,7 @@ const Profile = () => {
                       ),
                     }}
                   />
-                  <Button
-                    type="submit"
-                    variant="contained"
-                    color="primary"
-                    className={classes.submitButton}
-                  >
+                  <Button type="submit" variant="contained" color="primary">
                     Update
                   </Button>
                 </form>
@@ -239,6 +269,13 @@ const Profile = () => {
           </Paper>
         </Grid>
       </Grid>
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={3000}
+        onClose={hideSnackbar}
+        message={snackbarMessage}
+        className={classes.snackbar}
+      />
     </div>
   );
 };

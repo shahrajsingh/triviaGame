@@ -22,6 +22,7 @@ import Leaderboard from "./pages/leaderboards/leaderboards";
 import TeamView from "./pages/teamView/TeamView";
 import BufferPage from "./components/lobby/BufferPage";
 import ForgotPassword from "./components/authentication/forgotPassword/forgotPassword";
+import Analytics from "./components/Admin/Analytics";
 
 const router = createBrowserRouter([
   {
@@ -31,7 +32,7 @@ const router = createBrowserRouter([
         <App></App>
       </AuthProvider>
     ),
-    children:[
+    children: [
       {
         path: "/create_team",
         element: <CreateTeam></CreateTeam>,
@@ -62,6 +63,10 @@ const router = createBrowserRouter([
         element: <EditQuiz />,
       },
       {
+        path: "/admin/analytics",
+        element: <Analytics />,
+      },
+      {
         path: "/lobby",
         element: <Lobby />,
       },
@@ -69,7 +74,7 @@ const router = createBrowserRouter([
         path: "/leaderboard",
         element: <Leaderboard></Leaderboard>,
       },
-      
+
       {
         path: "/teamview",
         element: <TeamView></TeamView>,
@@ -118,7 +123,7 @@ const router = createBrowserRouter([
       <AuthProvider>
         <ForgotPassword></ForgotPassword>
       </AuthProvider>
-    )
+    ),
   },
   {
     path: "/startquiz",
