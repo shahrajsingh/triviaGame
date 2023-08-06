@@ -382,7 +382,7 @@ const Lobby = () => {
                         }}
                       >
                         <div style={{ padding: "10px" }}>
-                          <p>Number of Participants: {quiz.participants}</p>
+                          <p>Number of Participants: 5</p>
 
                           <p>Description: {quiz.quizDescription}</p>
                         </div>
