@@ -102,7 +102,7 @@ const Leaderboard = () => {
     if (categ && categ !== "") {
       await axios
         .post(
-          "https://us-central1-sdp-project-392915.cloudfunctions.net/function-7",
+          "https://us-central1-sdp-project-392915.cloudfunctions.net/get-team-data-category",
           { category: categ }
         )
         .then((res) => {
@@ -119,7 +119,7 @@ const Leaderboard = () => {
     } else {
       await axios
         .post(
-          "https://us-central1-sdp-project-392915.cloudfunctions.net/function-6",
+          "https://us-central1-sdp-project-392915.cloudfunctions.net/get-team-data",
           {}
         )
         .then((res) => {
