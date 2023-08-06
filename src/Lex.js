@@ -7,7 +7,7 @@ import axios from "axios";
 const ChatContainer = styled("div")({
   display: "flex",
   flexDirection: "column",
-  width: "350px", // Make the chat container a little bigger
+  width: "350px",
   position: "fixed",
   bottom: "20px",
   border: "1px solid #0099ff",
@@ -15,7 +15,7 @@ const ChatContainer = styled("div")({
 
   borderRadius: "5px",
   boxShadow: "0 0 5px #ccc",
-  backgroundColor: "#f0f0f0", // Set the background color to match the chat header background
+  backgroundColor: "#f0f0f0",
 });
 
 const ChatHeader = styled("div")({
@@ -33,33 +33,33 @@ const ChatHeader = styled("div")({
 const ChatBody = styled("div")({
   padding: "16px",
   maxHeight: "300px",
-  minHeight: "300px", // Set the max height of the chat body
+  minHeight: "300px",
   overflowY: "auto",
   display: "flex",
   flexDirection: "column",
   backgroundColor: "#fff",
-  flex: 1, // Allow the chat body to expand and fill the available vertical space
+  flex: 1,
 });
 
 const MessageBubble = styled("div")({
   padding: "8px",
   borderRadius: "5px",
   marginBottom: "8px",
-  display: "inline-block", // Change from "block" to "inline-block"
-  maxWidth: "70%", // Add max-width to make the chat bubble wrap text
+  display: "inline-block",
+  maxWidth: "70%",
 });
 
 const BotMessage = styled(MessageBubble)({
   backgroundColor: "#0099ff",
   color: "#fff",
-  alignSelf: "flex-start", // Align bot messages to the left
-  marginBottom: "4px", // Add some spacing between bot messages
+  alignSelf: "flex-start",
+  marginBottom: "4px",
 });
 
 const UserMessage = styled(MessageBubble)({
   backgroundColor: "#e0e0e0",
-  alignSelf: "flex-end", // Align user messages to the right
-  marginBottom: "4px", // Add some spacing between user messages
+  alignSelf: "flex-end",
+  marginBottom: "4px",
 });
 
 const ChatInput = styled("div")({
@@ -67,7 +67,7 @@ const ChatInput = styled("div")({
   alignItems: "center",
   borderTop: "1px solid #ccc",
   padding: "8px 16px",
-  backgroundColor: "#f0f0f0", // Set the background color to match the chat container
+  backgroundColor: "#f0f0f0",
 });
 
 const Lex = () => {
@@ -77,7 +77,6 @@ const Lex = () => {
   const chatBodyRef = useRef(null);
 
   useEffect(() => {
-    // Scroll the chat body to the bottom when a new message is added
     if (chatBodyRef.current) {
       chatBodyRef.current.scrollTop = chatBodyRef.current.scrollHeight;
     }

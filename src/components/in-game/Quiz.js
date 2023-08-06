@@ -195,7 +195,7 @@ const Quiz = () => {
         console.error("Failed to update score:", error);
       });
     if (currentQuestionIndex === questionData.questions.length - 1) {
-      changePage("/");
+      changePage("/leaderboard");
     } else {
       setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
     }
@@ -203,7 +203,7 @@ const Quiz = () => {
 
   const currentQuestion = questionData?.questions[currentQuestionIndex];
   if (questionData.questions.length === 0) {
-    return <div>Loading...</div>; // You can replace this with your custom loading component
+    return <div>Loading...</div>;
   }
   return (
     <>

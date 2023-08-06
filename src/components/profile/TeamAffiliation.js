@@ -37,8 +37,11 @@ const TeamAffiliation = () => {
           "https://scwmimxeql.execute-api.us-east-1.amazonaws.com/dev/get-all-teams",
           { username: userName }
         );
+
         const teamsData = response.data.body.teams;
-        setTeams(teamsData);
+
+        console.log(teamsData);
+        if (teamsData) setTeams(teamsData);
       } catch (error) {
         console.error("Error while fetching teams:", error);
       }
@@ -112,47 +115,64 @@ const TeamAffiliation = () => {
           Manage Teams
         </Typography>
       </Grid>
-      <Grid item xs={12}>
-        <List>
-          {teams.map((team) => (
-            <ListItem
-              key={team.id}
-              style={{
-                background: "#fff",
-                margin: "8px",
-                borderRadius: "8px",
-                padding: "12px",
-                display: "flex",
-                alignItems: "center",
-                boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
-              }}
-            >
-              <ListItemText
-                primary={team.name}
+      {teams && teams.length === 0 ? (
+        <Grid item xs={12}>
+          <Typography
+            variant="h6"
+            style={{
+              color: "#333",
+              fontFamily: "Arial, sans-serif",
+              fontWeight: "bold",
+              textAlign: "center",
+              marginTop: "16px",
+            }}
+          >
+            You are not a member of any team
+          </Typography>
+        </Grid>
+      ) : (
+        <Grid item xs={12}>
+          <List>
+            {teams.map((team) => (
+              <ListItem
+                key={team.id}
                 style={{
-                  flex: "1",
-                  color: "#333",
-                  fontFamily: "Arial, sans-serif",
-                  fontWeight: "bold",
-                }}
-              />
-              <StyledButton
-                variant="contained"
-                onClick={() => handleLeaveClick(team.id)}
-                style={{
-                  background: "#FF4F64",
-                  color: "#fff",
-                  fontFamily: "Arial, sans-serif",
-                  fontWeight: "bold",
-                  marginLeft: "16px",
+                  background: "#fff",
+                  margin: "8px",
+                  borderRadius: "8px",
+                  padding: "12px",
+                  display: "flex",
+                  alignItems: "center",
+                  boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
                 }}
               >
-                Leave
-              </StyledButton>
-            </ListItem>
-          ))}
-        </List>
-      </Grid>
+                <ListItemText
+                  primary={team.name}
+                  style={{
+                    flex: "1",
+                    color: "#333",
+                    fontFamily: "Arial, sans-serif",
+                    fontWeight: "bold",
+                  }}
+                />
+                <StyledButton
+                  variant="contained"
+                  onClick={() => handleLeaveClick(team.id)}
+                  style={{
+                    background: "#FF4F64",
+                    color: "#fff",
+                    fontFamily: "Arial, sans-serif",
+                    fontWeight: "bold",
+                    marginLeft: "16px",
+                  }}
+                >
+                  Leave
+                </StyledButton>
+              </ListItem>
+            ))}
+          </List>
+        </Grid>
+      )}
       <Snackbar
         open={snackbarOpen}
         autoHideDuration={2000}

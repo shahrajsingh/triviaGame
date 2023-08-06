@@ -16,6 +16,7 @@ import Select from "@mui/material/Select";
 import Box from "@mui/material/Box";
 import { AppBar, Button, CircularProgress, Toolbar } from "@mui/material";
 import axios from "axios";
+import Lex from "../../Lex";
 
 // The Leaderboard component is a functional component that manages the state and behavior of the leaderboard.
 const Leaderboard = () => {
@@ -487,17 +488,23 @@ const Details = ({ details }) => {
                 </TableRow>
                 <TableRow>
                   <TableCell>Total Games Lost </TableCell>
-                  <TableCell>{data?.numberOfDocumentsRetrieved - data?.gamesWon}</TableCell>
+                  <TableCell>
+                    {data?.numberOfDocumentsRetrieved - data?.gamesWon}
+                  </TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell>Win Rate </TableCell>
-                  <TableCell>{(data?.gamesWon / data?.numberOfDocumentsRetrieved) * 100} %</TableCell>
+                  <TableCell>
+                    {(data?.gamesWon / data?.numberOfDocumentsRetrieved) * 100}{" "}
+                    %
+                  </TableCell>
                 </TableRow>
               </TableBody>
             </Table>
           </TableContainer>
         </>
       )}
+      <Lex />
     </>
   );
 };

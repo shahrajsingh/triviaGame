@@ -3,7 +3,9 @@ import Stats from "./Stats";
 import Profile from "./Profile";
 import { Grid } from "@material-ui/core";
 import TeamAffiliation from "./TeamAffiliation";
-import Lex from "../Lex/Lex";
+
+import Achievement from "./Achievement";
+import Lex from "../../Lex";
 
 const ProfileHome = () => {
   return (
@@ -37,9 +39,12 @@ const ProfileHome = () => {
               marginRight: "15rem",
               marginTop: "3%",
             }}
-          ></Grid>
+          >
+            <Achievement />
+          </Grid>
         </Grid>
       </Grid>
+
       <Lex />
     </Grid>
   );
