@@ -43,7 +43,6 @@ const SendMessage = ({ scroll, team_id, game_id, userName }) => {
     });
     setMessage("");
 
-    // Scroll to the last message after sending a new message
     if (scroll && scroll.current) {
       scroll.current.scrollIntoView({ behavior: "smooth", block: "end" });
     }
